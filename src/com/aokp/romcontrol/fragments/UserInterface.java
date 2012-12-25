@@ -86,6 +86,7 @@ public class UserInterface extends AOKPPreferenceFragment {
     private static final String PREF_VIBRATE_NOTIF_EXPAND = "vibrate_notif_expand";
     private static final String PREF_RECENT_KILL_ALL = "recent_kill_all";
     private static final String PREF_RAM_USAGE_BAR = "ram_usage_bar";
+    private static final String PREF_KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
     private static final String PREF_IME_SWITCHER = "ime_switcher";
     private static final String PREF_STATUSBAR_BRIGHTNESS = "statusbar_brightness_slider";
 
@@ -109,6 +110,7 @@ public class UserInterface extends AOKPPreferenceFragment {
     CheckBoxPreference mVibrateOnExpand;
     CheckBoxPreference mRecentKillAll;
     CheckBoxPreference mRamBar;
+    CheckBoxPreference mKillAppLongpressBack;
     CheckBoxPreference mShowImeSwitcher;
     CheckBoxPreference mStatusbarSliderPreference;
 
@@ -188,7 +190,20 @@ public class UserInterface extends AOKPPreferenceFragment {
         mRamBar.setChecked(Settings.System.getBoolean(getActivity  ().getContentResolver(),
                 Settings.System.RAM_USAGE_BAR, false));
 
+        mKillAppLongpressBack = (CheckBoxPreference) findPreference(PREF_KILL_APP_LONGPRESS_BACK);
+                updateKillAppLongpressBackOptions();
+
         setHasOptionsMenu(true);
+    }
+
+    private void writeKillAppLongpressBackOptions() {
+        Settings.System.putInt(getActivity().getContentResolver(),
+                Settings.System.KILL_APP_LONGPRESS_BACK, mKillAppLongpressBack.isChecked() ? 1 : 0);
+    }
+
+    private void updateKillAppLongpressBackOptions() {
+        mKillAppLongpressBack.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.KILL_APP_LONGPRESS_BACK, 0) != 0);
     }
 
     private void updateCustomLabelTextSummary() {
@@ -384,7 +399,9 @@ public class UserInterface extends AOKPPreferenceFragment {
             Settings.System.putBoolean(getActivity().getContentResolver(),
                     Settings.System.RAM_USAGE_BAR, checked ? true : false);
             return true;
-        }
+        } else if (preference == mKillAppLongpressBack) {
+            writeKillAppLongpressBackOptions();
+		}
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
