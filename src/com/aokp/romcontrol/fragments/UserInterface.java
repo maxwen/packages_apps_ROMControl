@@ -119,7 +119,6 @@ public class UserInterface extends AOKPPreferenceFragment {
     CheckBoxPreference mLeftyMode;
     ImageView view;
     TextView error;
-    CheckBoxPreference mShowActionOverflow;
     CheckBoxPreference mTabletui;
     CheckBoxPreference mHideExtras;
     CheckBoxPreference mDualpane;
@@ -212,11 +211,6 @@ public class UserInterface extends AOKPPreferenceFragment {
 
         mKillAppLongpressBack = (CheckBoxPreference) findPreference(PREF_KILL_APP_LONGPRESS_BACK);
                 updateKillAppLongpressBackOptions();
-
-        mShowActionOverflow = (CheckBoxPreference) findPreference(PREF_SHOW_OVERFLOW);
-        mShowActionOverflow.setChecked((Settings.System.getInt(getActivity().
-                        getApplicationContext().getContentResolver(),
-                        Settings.System.UI_FORCE_OVERFLOW_BUTTON, 0) == 1));
 
         mTabletui = (CheckBoxPreference) findPreference(PREF_MODE_TABLET_UI);
         mTabletui.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
@@ -328,19 +322,6 @@ public class UserInterface extends AOKPPreferenceFragment {
                 }
             };
             processor.execute(getBootAnimationCommand(mDisableBootAnimation.isChecked()));
-            return true;
-        } else if (preference == mShowActionOverflow) {
-            boolean enabled = mShowActionOverflow.isChecked();
-            Settings.System.putInt(getContentResolver(), Settings.System.UI_FORCE_OVERFLOW_BUTTON,
-                    enabled ? 1 : 0);
-            // Show toast appropriately
-            if (enabled) {
-                Toast.makeText(getActivity(), R.string.show_overflow_toast_enable,
-                        Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getActivity(), R.string.show_overflow_toast_disable,
-                        Toast.LENGTH_LONG).show();
-            }
             return true;
         } else if (preference == mTabletui) {
             Settings.System.putBoolean(mContext.getContentResolver(),
