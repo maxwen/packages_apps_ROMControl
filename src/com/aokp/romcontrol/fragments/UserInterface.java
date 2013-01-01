@@ -271,12 +271,12 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         } else if (preference == mCustomBootAnimation) {
             PackageManager packageManager = getActivity().getPackageManager();
             Intent test = new Intent(Intent.ACTION_GET_CONTENT);
-            test.setType("file/*");
+            test.setType("application/zip");
             List<ResolveInfo> list = packageManager.queryIntentActivities(test,
                     PackageManager.GET_ACTIVITIES);
             if (list.size() > 0) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
-                intent.setType("file/*");
+                intent.setType("application/zip");
                 startActivityForResult(intent, REQUEST_PICK_BOOT_ANIMATION);
             } else {
                 //No app installed to handle the intent - file explorer required
