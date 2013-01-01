@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -46,6 +47,7 @@ import com.aokp.romcontrol.R;
 import com.aokp.romcontrol.util.AbstractAsyncSuCMDProcessor;
 import com.aokp.romcontrol.util.CMDProcessor;
 import com.aokp.romcontrol.util.Helpers;
+import com.aokp.romcontrol.widgets.SeekBarPreference;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -62,7 +64,7 @@ import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class UserInterface extends AOKPPreferenceFragment {
+public class UserInterface extends AOKPPreferenceFragment implements OnPreferenceChangeListener {
 
     public final String TAG = getClass().getSimpleName();
 
@@ -101,6 +103,7 @@ public class UserInterface extends AOKPPreferenceFragment {
     CheckBoxPreference mKillAppLongpressBack;
     CheckBoxPreference mShowImeSwitcher;
     CheckBoxPreference mStatusbarSliderPreference;
+    SeekBarPreference mNavBarAlpha;
 
     private AnimationDrawable mAnimationPart1;
     private AnimationDrawable mAnimationPart2;
@@ -182,6 +185,9 @@ public class UserInterface extends AOKPPreferenceFragment {
         mKillAppLongpressBack = (CheckBoxPreference) findPreference(PREF_KILL_APP_LONGPRESS_BACK);
                 updateKillAppLongpressBackOptions();
 
+        mNavBarAlpha = (SeekBarPreference) findPreference("navigation_bar_alpha");
+        mNavBarAlpha.setOnPreferenceChangeListener(this);
+
         setHasOptionsMenu(true);
     }
 
@@ -193,6 +199,17 @@ public class UserInterface extends AOKPPreferenceFragment {
     private void updateKillAppLongpressBackOptions() {
         mKillAppLongpressBack.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
                 Settings.System.KILL_APP_LONGPRESS_BACK, 0) != 0);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mNavBarAlpha != null) {
+            final float defaultNavAlpha = Settings.System.getFloat(getActivity()
+                    .getContentResolver(), Settings.System.NAVIGATION_BAR_ALPHA,
+                    0.8f);
+            mNavBarAlpha.setInitValue(Math.round(defaultNavAlpha * 100));
+        }
     }
 
     private void updateCustomLabelTextSummary() {
@@ -696,6 +713,17 @@ public class UserInterface extends AOKPPreferenceFragment {
             mAnimationPart1.start();
         }
     };
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (preference == mNavBarAlpha) {
+            float val = (float) (Integer.parseInt((String)newValue) * 0.01);
+            return Settings.System.putFloat(getActivity().getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_ALPHA,
+                    val);
+        }
+        return false;
+    }
 
     class InstallBootAnimTask extends AsyncTask<Void, Void, Void> {
         private final DialogInterface dialog;
