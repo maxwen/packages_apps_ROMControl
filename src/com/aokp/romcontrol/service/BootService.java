@@ -18,6 +18,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import com.aokp.romcontrol.R;
+
+import com.aokp.romcontrol.performance.CPUSettings;
+import com.aokp.romcontrol.util.CMDProcessor;
+import com.aokp.romcontrol.util.Helpers;
+
 public class BootService extends Service {
 
     public static boolean servicesStarted = false;
@@ -46,6 +52,8 @@ public class BootService extends Service {
 
         @Override
         protected Void doInBackground(Void... args) {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
+            final CMDProcessor cmd = new CMDProcessor();
 
             if (HeadphoneService.getUserHeadphoneAudioMode(c) != -1
                     || HeadphoneService.getUserBTAudioMode(c) != -1) {
@@ -55,6 +63,20 @@ public class BootService extends Service {
             if (FlipService.getUserFlipAudioMode(c) != -1
                     || FlipService.getUserCallSilent(c) != 0)
                 c.startService(new Intent(c, FlipService.class));
+
+            if (preferences.getBoolean("cpu_boot", false)) {
+                final String freqMax = preferences.getString(
+                        "freq_max", null);
+                final String freqSuspend = preferences.getString(
+                        "freq_suspend", null);
+                if (freqMax != null && freqSuspend != null) {
+                    cmd.su.runWaitFor("busybox echo " + freqMax +
+                            " > " + CPUSettings.TEGRA_MAX_FREQ);
+
+                    cmd.su.runWaitFor("busybox echo " + freqSuspend +
+                            " > " + CPUSettings.SCREEN_OFF_FREQ);
+                }
+            }
 
             return null;
         }

@@ -957,4 +957,7 @@
     <string name="hardware_keys_action_in_app_search">In-app search</string>
     <string name="hardware_keys_additional_options">Additional options</string>
 
+    <!-- Performance -->
+    <string name="freq_max_speed">Max:</string>   
+    <string name="freq_suspend_speed">Suspend Max:</string>     
 </resources>
