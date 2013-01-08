@@ -237,36 +237,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                     ((CheckBoxPreference) preference).isChecked());
             return true;
         } else if (preference == mDisableBootAnimation) {
-            CMDProcessor term = new CMDProcessor();
-            if (!term.su.runWaitFor(
-                    "grep -q \"debug.sf.nobootanimation\" /system/build.prop")
-                    .success()) {
-                // if not add value
-                Helpers.getMount("rw");
-                term.su.runWaitFor("echo debug.sf.nobootanimation="
-                    + String.valueOf(mDisableBootAnimation.isChecked() ? 1 : 0)
-                    + " >> /system/build.prop");
-                Helpers.getMount("ro");
-            }
-            // preform bootanimation operations off UI thread
-            AbstractAsyncSuCMDProcessor processor = new AbstractAsyncSuCMDProcessor(true) {
-                @Override
-                protected void onPostExecute(String result) {
-                    if (mDisableBootAnimation.isChecked()) {
-                        // do not show same insult as last time
-                        int newInsult = randomGenerator.nextInt(mInsults.length);
-                        while (newInsult == mLastRandomInsultIndex)
-                            newInsult = randomGenerator.nextInt(mInsults.length);
-
-                        // update our static index reference
-                        mLastRandomInsultIndex = newInsult;
-                        preference.setSummary(mInsults[newInsult]);
-                    } else {
-                        preference.setSummary("");
-                    }
-                }
-            };
-            processor.execute(getBootAnimationCommand(mDisableBootAnimation.isChecked()));
+            DisableBootAnimation();
             return true;
         } else if (preference == mCustomBootAnimation) {
             PackageManager packageManager = getActivity().getPackageManager();
@@ -735,6 +706,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         protected void onPreExecute() {
             //Update setting to reflect that boot animation is now enabled
             mDisableBootAnimation.setChecked(false);
+            DisableBootAnimation();
             dialog.dismiss();
         }
 
@@ -750,5 +722,49 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             Helpers.getMount("ro");
             return null;
         }
+    }
+
+    private void DisableBootAnimation() {
+        CMDProcessor term = new CMDProcessor();
+        if (!term.su.runWaitFor(
+                "grep -q \"debug.sf.nobootanimation\" /system/build.prop")
+                .success()) {
+            // if not add value
+            Helpers.getMount("rw");
+            term.su.runWaitFor("echo debug.sf.nobootanimation="
+                + String.valueOf(mDisableBootAnimation.isChecked() ? 1 : 0)
+                + " >> /system/build.prop");
+            Helpers.getMount("ro");
+        }
+        // preform bootanimation operations off UI thread
+        AbstractAsyncSuCMDProcessor processor = new AbstractAsyncSuCMDProcessor(true) {
+            @Override
+            protected void onPostExecute(String result) {
+                if (mDisableBootAnimation.isChecked()) {
+                    // do not show same insult as last time
+                    int newInsult = randomGenerator.nextInt(mInsults.length);
+                    while (newInsult == mLastRandomInsultIndex)
+                        newInsult = randomGenerator.nextInt(mInsults.length);
+
+                    // update our static index reference
+                    mLastRandomInsultIndex = newInsult;
+                    mDisableBootAnimation.setSummary(mInsults[newInsult]);
+                } else {
+                    mDisableBootAnimation.setSummary("");
+                }
+            }
+        };
+        processor.execute(getBootAnimationCommand(mDisableBootAnimation.isChecked()));
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (preference == mNavBarAlpha) {
+            float val = (float) (Integer.parseInt((String)newValue) * 0.01);
+            return Settings.System.putFloat(getActivity().getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_ALPHA,
+                    val);
+        }
+        return false;
     }
 }
