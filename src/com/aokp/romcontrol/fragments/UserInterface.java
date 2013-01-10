@@ -685,17 +685,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         }
     };
 
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == mNavBarAlpha) {
-            float val = (float) (Integer.parseInt((String)newValue) * 0.01);
-            return Settings.System.putFloat(getActivity().getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_ALPHA,
-                    val);
-        }
-        return false;
-    }
-
     class InstallBootAnimTask extends AsyncTask<Void, Void, Void> {
         private final DialogInterface dialog;
 
