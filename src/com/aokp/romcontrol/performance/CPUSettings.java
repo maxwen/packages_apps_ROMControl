@@ -43,20 +43,20 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     public static final String SCREEN_OFF_FREQ = "/sys/htc/suspend_freq";
     
     public static final String FREQ_MAX = "freq_max";
-    public static final String FREQ_SUSPEND = "freq_suspend";
+    //public static final String FREQ_SUSPEND = "freq_suspend";
     public static final String SOB = "cpu_boot";
 
     private SeekBar mFreqMaxSlider;
-    private SeekBar mFreqSuspendSlider;
+    //private SeekBar mFreqSuspendSlider;
     private Switch mSetOnBoot;
     private TextView mFreqMaxText;
-    private TextView mFreqSuspendText;
+    //private TextView mFreqSuspendText;
     private String[] availableFrequencies;
     private String[] availableFrequenciesWithZero;
     private Activity mActivity;
 
     private String mFreqMaxSetting;
-    private String mFreqSuspendSetting;
+    //private String mFreqSuspendSetting;
 
     private static SharedPreferences preferences;
 
@@ -113,12 +113,12 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mFreqMaxSlider.setProgress(Arrays.asList(availableFrequenciesWithZero).indexOf(curTegraMaxSpeed));
         mFreqMaxSlider.setOnSeekBarChangeListener(this);
 
-        mFreqSuspendSlider = (SeekBar) view.findViewById(R.id.freq_suspend_slider);
-        mFreqSuspendSlider.setMax(frequenciesNum);
-        mFreqSuspendText = (TextView) view.findViewById(R.id.freq_suspend_speed_text);
-        mFreqSuspendText.setText(toMHz(curSuspendSpeed));
-        mFreqSuspendSlider.setProgress(Arrays.asList(availableFrequencies).indexOf(curSuspendSpeed));
-        mFreqSuspendSlider.setOnSeekBarChangeListener(this);
+        //mFreqSuspendSlider = (SeekBar) view.findViewById(R.id.freq_suspend_slider);
+        //mFreqSuspendSlider.setMax(frequenciesNum);
+        //mFreqSuspendText = (TextView) view.findViewById(R.id.freq_suspend_speed_text);
+        //mFreqSuspendText.setText(toMHz(curSuspendSpeed));
+        //mFreqSuspendSlider.setProgress(Arrays.asList(availableFrequencies).indexOf(curSuspendSpeed));
+        //mFreqSuspendSlider.setOnSeekBarChangeListener(this);
 
         mSetOnBoot = (Switch) view.findViewById(R.id.set_on_boot);
         mSetOnBoot.setChecked(preferences.getBoolean(SOB, false));
@@ -141,9 +141,9 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 case R.id.freq_max_slider:
                     setFreqMaxSpeed(seekBar, progress);
                     break;
-                case R.id.freq_suspend_slider:
-                    setSuspendMaxSpeed(seekBar, progress);
-                    break;
+                //case R.id.freq_suspend_slider:
+                //    setSuspendMaxSpeed(seekBar, progress);
+                //    break;
             }
         }
     }
@@ -158,7 +158,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         CMDProcessor cmd = new CMDProcessor();
         
         cmd.su.runWaitFor("busybox echo " + mFreqMaxSetting + " > " + TEGRA_MAX_FREQ);
-        cmd.su.runWaitFor("busybox echo " + mFreqSuspendSetting + " > " + SCREEN_OFF_FREQ);
+        //cmd.su.runWaitFor("busybox echo " + mFreqSuspendSetting + " > " + SCREEN_OFF_FREQ);
     }
 
     @Override
@@ -188,7 +188,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         editor.commit();
     }
 
-    public void setSuspendMaxSpeed(SeekBar seekBar, int progress) {
+    /*public void setSuspendMaxSpeed(SeekBar seekBar, int progress) {
         String current = "";
         current = availableFrequencies[progress];
         CMDProcessor cmd = new CMDProcessor();
@@ -203,7 +203,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         final SharedPreferences.Editor editor = preferences.edit();
         editor.putString(FREQ_SUSPEND, current);
         editor.commit();
-    }
+    }*/
 
     private String toMHz(String mhzString) {
     	if(mhzString.equals("0")){
