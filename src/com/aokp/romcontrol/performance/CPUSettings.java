@@ -206,7 +206,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     }*/
 
     private String toMHz(String mhzString) {
-    	if(mhzString.equals("0")){
+    	if(mhzString == null || mhzString.equals("0")){
     		return "disabled";
     	}
         return new StringBuilder().append(Integer.valueOf(mhzString) / 1000).append(" MHz").toString();
