@@ -64,17 +64,22 @@ public class BootService extends Service {
                     || FlipService.getUserCallSilent(c) != 0)
                 c.startService(new Intent(c, FlipService.class));
 
-            if (preferences.getBoolean("cpu_boot", false)) {
+            if (preferences.getBoolean(CPUSettings.SOB, false)) {
                 final String freqMax = preferences.getString(
-                        "freq_max", null);
-                final String freqSuspend = preferences.getString(
-                        "freq_suspend", null);
-                if (freqMax != null && freqSuspend != null) {
+                        CPUSettings.FREQ_MAX, null);
+                //final String freqSuspend = preferences.getString(
+                //        "freq_suspend", null);
+                final String maxCPU = preferences.getString(
+                        CPUSettings.CPU_MAX, null);
+               if (freqMax != null /*&& freqSuspend != null*/ && maxCPU != null) {
                     cmd.su.runWaitFor("busybox echo " + freqMax +
                             " > " + CPUSettings.TEGRA_MAX_FREQ);
 
-                    cmd.su.runWaitFor("busybox echo " + freqSuspend +
-                            " > " + CPUSettings.SCREEN_OFF_FREQ);
+                    //cmd.su.runWaitFor("busybox echo " + freqSuspend +
+                    //        " > " + CPUSettings.SCREEN_OFF_FREQ);
+
+                    cmd.su.runWaitFor("busybox echo " + maxCPU +
+                            " > " + CPUSettings.TEGRA_MAX_CPU);
                 }
             }
 

@@ -1,8 +1,10 @@
 package com.aokp.romcontrol.performance;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -20,6 +24,7 @@ import android.widget.TextView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.EditText;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -41,23 +46,29 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     public static final String TEGRA_MAX_FREQ = "/sys/module/cpu_tegra/parameters/cpu_user_cap";
     public static final String STEPS = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies";
     public static final String SCREEN_OFF_FREQ = "/sys/htc/suspend_freq";
-    
+    public static final String TEGRA_MAX_CPU = "/sys/kernel/tegra_mpdecision/conf/max_cpus";
+        
     public static final String FREQ_MAX = "freq_max";
+    public static final String CPU_MAX = "cpu_max";
     //public static final String FREQ_SUSPEND = "freq_suspend";
     public static final String SOB = "cpu_boot";
 
     private SeekBar mFreqMaxSlider;
     //private SeekBar mFreqSuspendSlider;
+    private SeekBar mMaxCPUSlider;
     private Switch mSetOnBoot;
     private TextView mFreqMaxText;
     //private TextView mFreqSuspendText;
+    private TextView mCPUMaxText;
     private String[] availableFrequencies;
     private String[] availableFrequenciesWithZero;
+    private String[] maxCPUList = {"1", "2", "3", "4"};
     private Activity mActivity;
 
     private String mFreqMaxSetting;
     //private String mFreqSuspendSetting;
-
+    private String mCPUMaxSetting;
+        
     private static SharedPreferences preferences;
 
     @Override
@@ -96,15 +107,26 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             curMaxSpeed = Integer.parseInt(curTegraMaxSpeed);
         } catch (NumberFormatException ex) {
             curMaxSpeed = 0;
+            curTegraMaxSpeed = "0";
         }
 
-        String curSuspendSpeed = Helpers.readOneLine(SCREEN_OFF_FREQ);
-        int curSuspendSpeedMax = 0;
+        //String curSuspendSpeed = Helpers.readOneLine(SCREEN_OFF_FREQ);
+        //int curSuspendSpeedMax = 0;
+        //try {
+        //    curSuspendSpeedMax = Integer.parseInt(curSuspendSpeed);
+        //} catch (NumberFormatException ex) {
+        //    curSuspendSpeedMax = 0;
+        //}
+
+        String curCPU = Helpers.readOneLine(TEGRA_MAX_CPU);
+        int curCPUMax = 0;
         try {
-            curSuspendSpeedMax = Integer.parseInt(curSuspendSpeed);
+            curCPUMax = Integer.parseInt(curCPU);
         } catch (NumberFormatException ex) {
-            curSuspendSpeedMax = 0;
+            curCPUMax = 4;
+            curCPU = "4";
         }
+        mCPUMaxSetting = Integer.valueOf(curCPUMax).toString();
 
         mFreqMaxSlider = (SeekBar) view.findViewById(R.id.freq_max_slider);
         mFreqMaxSlider.setMax(frequenciesNumWithZero);
@@ -120,6 +142,13 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         //mFreqSuspendSlider.setProgress(Arrays.asList(availableFrequencies).indexOf(curSuspendSpeed));
         //mFreqSuspendSlider.setOnSeekBarChangeListener(this);
 
+        mMaxCPUSlider = (SeekBar) view.findViewById(R.id.max_cpu_slider);
+        mMaxCPUSlider.setMax(3);
+        mCPUMaxText = (TextView) view.findViewById(R.id.max_cpu_text);
+        mCPUMaxText.setText(mCPUMaxSetting);
+        mMaxCPUSlider.setProgress(Arrays.asList(maxCPUList).indexOf(curCPU));
+        mMaxCPUSlider.setOnSeekBarChangeListener(this);
+		
         mSetOnBoot = (Switch) view.findViewById(R.id.set_on_boot);
         mSetOnBoot.setChecked(preferences.getBoolean(SOB, false));
         mSetOnBoot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -144,6 +173,9 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 //case R.id.freq_suspend_slider:
                 //    setSuspendMaxSpeed(seekBar, progress);
                 //    break;
+                case R.id.max_cpu_slider:
+                    setMaxCPU(seekBar, progress);
+                    break;
             }
         }
     }
@@ -159,6 +191,7 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         
         cmd.su.runWaitFor("busybox echo " + mFreqMaxSetting + " > " + TEGRA_MAX_FREQ);
         //cmd.su.runWaitFor("busybox echo " + mFreqSuspendSetting + " > " + SCREEN_OFF_FREQ);
+        cmd.su.runWaitFor("busybox echo " + mCPUMaxSetting + " > " + TEGRA_MAX_CPU);
     }
 
     @Override
@@ -174,7 +207,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     public void setFreqMaxSpeed(SeekBar seekBar, int progress) {
         String current = "";
         current = availableFrequenciesWithZero[progress];
-        CMDProcessor cmd = new CMDProcessor();
         int sliderProgress = mFreqMaxSlider.getProgress();
         if (progress <= sliderProgress) {
             mFreqMaxSlider.setProgress(progress);
@@ -191,7 +223,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     /*public void setSuspendMaxSpeed(SeekBar seekBar, int progress) {
         String current = "";
         current = availableFrequencies[progress];
-        CMDProcessor cmd = new CMDProcessor();
         int sliderProgress = mFreqSuspendSlider.getProgress();
         if (progress >= sliderProgress) {
             mFreqSuspendSlider.setProgress(progress);
@@ -205,10 +236,28 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         editor.commit();
     }*/
 
+    public void setMaxCPU(SeekBar seekBar, int progress) {
+        String current = "";
+        current = maxCPUList[progress];
+        int sliderProgress = mMaxCPUSlider.getProgress();
+        if (progress <= sliderProgress) {
+            mMaxCPUSlider.setProgress(progress);
+            mCPUMaxText.setText(current);
+            mCPUMaxSetting = current;
+        }
+        mCPUMaxText.setText(current);
+        mCPUMaxSetting = current;
+        final SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(CPU_MAX, current);
+        editor.commit();
+    }
+	
     private String toMHz(String mhzString) {
     	if(mhzString == null || mhzString.equals("0")){
     		return "disabled";
     	}
         return new StringBuilder().append(Integer.valueOf(mhzString) / 1000).append(" MHz").toString();
     }
+    
+
 }
