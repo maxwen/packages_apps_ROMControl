@@ -967,7 +967,7 @@
 
     <!-- Performance -->
     <string name="freq_max_speed">Max frequency:</string>   
-    <string name="freq_suspend_speed">Suspend max frequency:</string>  
     <string name="max_cpu_num">Max CPU number:</string>   
+    <string name="enable_oc">Enable CPU 4x1.7Ghz:</string>   
    
 </resources>

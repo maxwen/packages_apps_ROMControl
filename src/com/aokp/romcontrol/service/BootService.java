@@ -67,19 +67,20 @@ public class BootService extends Service {
             if (preferences.getBoolean(CPUSettings.SOB, false)) {
                 final String freqMax = preferences.getString(
                         CPUSettings.FREQ_MAX, null);
-                //final String freqSuspend = preferences.getString(
-                //        "freq_suspend", null);
                 final String maxCPU = preferences.getString(
                         CPUSettings.CPU_MAX, null);
-               if (freqMax != null /*&& freqSuspend != null*/ && maxCPU != null) {
+                final String enableOC = preferences.getBoolean(
+                		CPUSettings.ENABLE_OC, false)?"1":"0";
+                
+               	if (freqMax != null && maxCPU != null) {
                     cmd.su.runWaitFor("busybox echo " + freqMax +
                             " > " + CPUSettings.TEGRA_MAX_FREQ);
 
-                    //cmd.su.runWaitFor("busybox echo " + freqSuspend +
-                    //        " > " + CPUSettings.SCREEN_OFF_FREQ);
-
                     cmd.su.runWaitFor("busybox echo " + maxCPU +
                             " > " + CPUSettings.TEGRA_MAX_CPU);
+                          
+                    cmd.su.runWaitFor("busybox echo " + enableOC + 
+                     		" > " + CPUSettings.TEGRA_ENABLE_OC);
                 }
             }
 

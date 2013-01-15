@@ -47,18 +47,18 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     public static final String STEPS = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies";
     public static final String SCREEN_OFF_FREQ = "/sys/htc/suspend_freq";
     public static final String TEGRA_MAX_CPU = "/sys/kernel/tegra_mpdecision/conf/max_cpus";
-        
+    public static final String TEGRA_ENABLE_OC = "/sys/module/cpu_tegra/parameters/enable_oc";
+            
     public static final String FREQ_MAX = "freq_max";
     public static final String CPU_MAX = "cpu_max";
-    //public static final String FREQ_SUSPEND = "freq_suspend";
+    public static final String ENABLE_OC = "enable_oc";
     public static final String SOB = "cpu_boot";
 
     private SeekBar mFreqMaxSlider;
-    //private SeekBar mFreqSuspendSlider;
     private SeekBar mMaxCPUSlider;
     private Switch mSetOnBoot;
+    private Switch mEnableOC;
     private TextView mFreqMaxText;
-    //private TextView mFreqSuspendText;
     private TextView mCPUMaxText;
     private String[] availableFrequencies;
     private String[] availableFrequenciesWithZero;
@@ -66,7 +66,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     private Activity mActivity;
 
     private String mFreqMaxSetting;
-    //private String mFreqSuspendSetting;
     private String mCPUMaxSetting;
         
     private static SharedPreferences preferences;
@@ -110,14 +109,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             curTegraMaxSpeed = "0";
         }
 
-        //String curSuspendSpeed = Helpers.readOneLine(SCREEN_OFF_FREQ);
-        //int curSuspendSpeedMax = 0;
-        //try {
-        //    curSuspendSpeedMax = Integer.parseInt(curSuspendSpeed);
-        //} catch (NumberFormatException ex) {
-        //    curSuspendSpeedMax = 0;
-        //}
-
         String curCPU = Helpers.readOneLine(TEGRA_MAX_CPU);
         int curCPUMax = 0;
         try {
@@ -135,19 +126,26 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         mFreqMaxSlider.setProgress(Arrays.asList(availableFrequenciesWithZero).indexOf(curTegraMaxSpeed));
         mFreqMaxSlider.setOnSeekBarChangeListener(this);
 
-        //mFreqSuspendSlider = (SeekBar) view.findViewById(R.id.freq_suspend_slider);
-        //mFreqSuspendSlider.setMax(frequenciesNum);
-        //mFreqSuspendText = (TextView) view.findViewById(R.id.freq_suspend_speed_text);
-        //mFreqSuspendText.setText(toMHz(curSuspendSpeed));
-        //mFreqSuspendSlider.setProgress(Arrays.asList(availableFrequencies).indexOf(curSuspendSpeed));
-        //mFreqSuspendSlider.setOnSeekBarChangeListener(this);
-
         mMaxCPUSlider = (SeekBar) view.findViewById(R.id.max_cpu_slider);
         mMaxCPUSlider.setMax(3);
         mCPUMaxText = (TextView) view.findViewById(R.id.max_cpu_text);
         mCPUMaxText.setText(mCPUMaxSetting);
         mMaxCPUSlider.setProgress(Arrays.asList(maxCPUList).indexOf(curCPU));
         mMaxCPUSlider.setOnSeekBarChangeListener(this);
+
+        mEnableOC = (Switch) view.findViewById(R.id.enable_oc);
+        mEnableOC.setChecked(preferences.getBoolean(ENABLE_OC, false));
+        mEnableOC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton v, boolean checked) {
+                final SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(ENABLE_OC, checked);
+                editor.commit();
+                
+                CMDProcessor cmd = new CMDProcessor();
+        		cmd.su.runWaitFor("busybox echo " + (checked?"1":"0") + " > " + TEGRA_ENABLE_OC);
+            }
+        });
 		
         mSetOnBoot = (Switch) view.findViewById(R.id.set_on_boot);
         mSetOnBoot.setChecked(preferences.getBoolean(SOB, false));
@@ -170,9 +168,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
                 case R.id.freq_max_slider:
                     setFreqMaxSpeed(seekBar, progress);
                     break;
-                //case R.id.freq_suspend_slider:
-                //    setSuspendMaxSpeed(seekBar, progress);
-                //    break;
                 case R.id.max_cpu_slider:
                     setMaxCPU(seekBar, progress);
                     break;
@@ -190,7 +185,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         CMDProcessor cmd = new CMDProcessor();
         
         cmd.su.runWaitFor("busybox echo " + mFreqMaxSetting + " > " + TEGRA_MAX_FREQ);
-        //cmd.su.runWaitFor("busybox echo " + mFreqSuspendSetting + " > " + SCREEN_OFF_FREQ);
         cmd.su.runWaitFor("busybox echo " + mCPUMaxSetting + " > " + TEGRA_MAX_CPU);
     }
 
@@ -219,22 +213,6 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
         editor.putString(FREQ_MAX, current);
         editor.commit();
     }
-
-    /*public void setSuspendMaxSpeed(SeekBar seekBar, int progress) {
-        String current = "";
-        current = availableFrequencies[progress];
-        int sliderProgress = mFreqSuspendSlider.getProgress();
-        if (progress >= sliderProgress) {
-            mFreqSuspendSlider.setProgress(progress);
-            mFreqSuspendText.setText(toMHz(current));
-            mFreqSuspendSetting = current;
-        }
-        mFreqSuspendText.setText(toMHz(current));
-        mFreqSuspendSetting = current;
-        final SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(FREQ_SUSPEND, current);
-        editor.commit();
-    }*/
 
     public void setMaxCPU(SeekBar seekBar, int progress) {
         String current = "";
