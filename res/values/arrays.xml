@@ -77,6 +77,7 @@
         <item>BLUETOOTH</item>
         <item>VIBRATE</item>
         <item>SILENT</item>
+        <item>SOUNDSTATE</item>
         <item>SYNC</item>
         <item>NFC</item>
         <item>WIFITETHER</item>
@@ -101,6 +102,7 @@
         <item>@string/toggle_bluetooth</item>
         <item>@string/toggle_vibrate</item>
         <item>@string/toggle_silent</item>
+        <item>@string/toggle_sound_state</item>
         <item>@string/toggle_sync</item>
         <item>@string/toggle_nfc</item>
         <item>@string/toggle_wifi_tether</item>
