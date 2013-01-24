@@ -24,8 +24,6 @@
     <string name="weather">El tiempo</string>
     <string name="tools">Herramientas</string>
     <string name="performance">Rendimiento</string>
-
-    <!-- Activity titles defined in AndroidManifest.xml -->
     <string name="title_about">Sobre AOKP</string>
     <string name="title_ui">Ajustes interfaz de usuario</string>
     <string name="title_statusbar_clock">Ajustes del reloj en barra de estado</string>
@@ -146,7 +144,7 @@
     <string name="lefty_mode_summary">Cambiar localización de NavBar (necesita reiniciar la interfaz)</string>
     <string name="rotate_180_title">Permitir rotación de 180 grados</string>
     <string name="rotate_180_summary">Permite a su dispositivo rotar 180 grados!</string>
-    <string name="recent_kill_all">Kill All</string>
+    <string name="recent_kill_all">Matar Todo</string>
     <string name="recent_kill_all_summary">Mostrar boton de Matar Todo en el menu de aplicaciones recientes</string>
     <string name="ram_bar">RAM Bar</string>
     <string name="ram_bar_summary">Mostrar consumo de Ram en el menu de aplicaciones recientes</string>
@@ -158,6 +156,8 @@
     <string name="hide_extras_summary">Ocultar algunas cosas del systembar y hacer el boton compacto (necesita reiniciar la interfaz)</string>
     <string name="bootanimation_preview">Vista previa</string>
     <string name="apply">Aplicar</string>
+    <string name="clear_custom_bootanimation">Eliminar animacion de arranque personalizada</string>
+    <string name="set_custom_bootanimation">Ajuste personalizado...</string>
     <string name="creating_preview">Creando vista previa...</string>
     <string name="error_reading_zip_file">Error leyendo el archivo zip</string>
     <string name="error_creating_preview">Error creando vista previa</string>
@@ -169,9 +169,13 @@
     <string name="show_overflow_toast_disable">El botón de menú puede ser visible hasta que se reinicien las aplicaciones</string>
     <string name="notification_show_wifi_ssid_title">Ver nombre de conección wifi</string>
     <string name="notification_show_wifi_ssid_summary">Mostrar el nombre de la conección actual de wifi</string>
-
-
-    <!-- LCD Density -->
+    <string name="brightness_slider_title">Regular brillo sobre la barra de estado</string>
+    <string name="brightness_slider_summary">Le permite deslizar el dedo por la parte superior de la barra de estado para cambiar el brillo. No hace nada cuando el brillo está en automático.</string>
+    <string name="user_mode_ui">UI Mode</string>
+    <string name="user_mode_ui_summary">Qué estilo desea mostrar en la barra de estado y la barra de navegación?</string>
+    <string name="phone_mode_ui">Phone - NavBar a lado en el panorama</string>
+    <string name="tablet_mode_ui">Tablet - Combinado NavBar y SystemBar</string>
+    <string name="phablet_mode_ui">Phablet - NavBar se queda en la parte inferior en el panorama</string>
     <string name="lcd_density_title">Densidad LCD</string>
     <string name="lcd_density_summary">Desconocida</string>
     <string name="current_lcd_density">"Densidad LCD actual: "</string>
@@ -228,8 +232,10 @@
     <string name="toggle_text_color_title">Color del texto</string>
     <string name="toggle_favcontact_title">Contacto favorito</string>
     <string name="toggle_favcontact_summary">Elegir tu contacto favorito</string>
-
-    <!-- Statusbar | Clock -->
+    <string name="toggle_enable_fasttoggle_title">Activar toggle rápido</string>
+    <string name="toggle_enable_fasttoggle_summary">Invalida el comportamiento por defecto</string>
+    <string name="toggle_choose_fasttoggle_side_title">Elige el lado del toggle rápido</string>
+    <string name="toggle_choose_fasttoggle_side_summary">Elige de qué lado estará el toogle rápido</string>
     <string name="clock_title_enable">Ubicación del reloj</string>
     <string name="title_clock_ampm_entries">Formato AM/PM</string>
     <string name="enable_clock_weekday">Día de la semana</string>
@@ -270,10 +276,9 @@
     <string name="toggle_signal">Señal</string>
     <string name="toggle_clock">Reloj</string>
     <string name="toggle_ime">Teclado</string>
-    <string name="toggle_battery">Bateria</string>
+    <string name="toggle_battery">Batería</string>
     <string name="toggle_brightness">Brillo</string>
-
-    <!-- Statusbar | Battery -->
+    <string name="toggle_sound_state">Sonido/Vib/Silencio</string>
     <string name="battery_icon">Aspecto del indicador de batería</string>
     <string name="battery_not_title">Indicador de batería en panel de notificaciones</string>
     <string name="battery_not_summary">El icono de la batería se mostrará donde aparece el botón de limpiar notificaciones</string>
@@ -364,8 +369,9 @@
     <string name="navbar_widgets_shiftLeft">Mover a la izquierda</string>
     <string name="navbar_widgets_shiftRight">Mover a la derecha</string>
     <string name="navbar_widgets_delete">Borrar widget</string>
-
-    <!-- Nav Ring Targets -->
+    <string name="navigation_bar_menu_arrow_keys_title">Flechas de menú</string>
+    <string name="navigation_bar_menu_arrow_keys_summary">Mostrar flecha en la barra de navegación mientras se escribe</string>
+    <string name="navigation_bar_alpha_title">Opacidad barra de estado y la barra de navegación</string>
     <string name="navbar_ring_cat">Accesos en barra de navegación</string>
     <string name="interface_softkey_settings">Configuración de accesos</string>
     <string name="interface_softkeys_pref_default_1_title">Presión corta objeto 1</string>
@@ -461,12 +467,22 @@
     <string name="lockscreen_menu_unlock_summary">Usar los botones de menú para desbloquear la pantalla</string>
     <string name="lockscreen_auto_rotate_title">Permitir rotación de pantalla de desbloqueo</string>
     <string name="lockscreen_auto_rotate_summary">La pantalla de desbloqueo podrá rotar según su orientación. Este ajuste es independiente a la rotación de la pantalla principal</string>
+    <string name="lock_clock_title">Ajustes de Reloj Chronus</string>
+    <string name="lock_clock_summary">"Ver o cambiar la forma que se ve 'Chronus' en el escritorio y la pantalla de widgets"</string>
     <string name="lockscreen_all_widgets_title">Permitir a todos los widgets</string>
     <string name="lockscreen_all_widgets_summary">Advertencia** Algunos widgets no están destinados a ser utilizados en la pantalla de bloqueo, el fabricante del widget y AOKP no son responsables de la elección de los widgets.Elige responsablemente.</string>
     <string name="lockscreen_unlimited_widgets_title">Permitir widgets sin limites</string>
     <string name="lockscreen_unlimited_widgets_summary">Advertencia** Agregar muchos widgets puede ocasionar demasiados problemas de lag en la pantalla de bloqueo.</string>
     <string name="lockscreen_battery_title">Porcentaje de batería en pantalla de desbloqueo</string>
     <string name="lockscreen_battery_summary">Mostrar siempre el porcentaje de la batería en pantalla de desbloqueo</string>
+    <string name="lockscreen_hide_initial_page_hints_title">Ocultar sugerencias iniciales de página</string>
+    <string name="lockscreen_hide_initial_page_hints_summary">Establezca si las sugerencias para los widgets izquierda y derecha se muestra cuando la pantalla está encendida.</string>
+    <string name="lockscreen_minimize_challenge_title">Minimizar tipo de pantalla de bloqueo</string>
+    <string name="lockscreen_minimize_challenge_summary">Defina si el tipo de pantalla de bloqueo (círculo, patrón, pin) se minimiza cuando la pantalla está encendida.</string>
+    <string name="lockscreen_longpress_challenge_title">Activar pulsación larga desbloquear</string>
+    <string name="lockscreen_longpress_challenge_summary">Esto permite que el dispositivo se desbloquee con los widgets maximizados por una presión larga en el icono de bloqueo.</string>
+    <string name="lockscreen_use_widget_container_carousel_title">Utilice widget carrusel</string>
+    <string name="lockscreen_use_widget_container_carousel_summary">Utilice una animación de carrusel al cambiar entre los widgets en la pantalla de bloqueo.</string>
     <string name="volume_rocker_wake_title">Desbloquear con volumen</string>
     <string name="volume_rocker_wake_summary">Desbloquear pantalla con los botones de volumen</string>
     <string name="volume_music_controls_title">Control de volumen de musica</string>
@@ -687,48 +703,6 @@
 
     <!-- Share to clipboard -->
     <string name="clipboard_notification">Copiado al portapapeles.</string>
-
-    <!-- Performance -->
-    <string name="tab_cpu_settings">"Ajustar CPU"</string>
-    <string name="tab_voltage_settings">"Ajustar voltajes"</string>
-    <string name="tab_other_settings">"Otros ajustes"</string>
-    <string name="current_speed">Velocidad actual</string>
-    <string name="current_max">Velocidad máxima:</string>
-    <string name="current_min">Velocidad mínima:</string>
-    <string name="governor">Governor</string>
-    <string name="io">Planificador de E/S</string>
-    <string name="sob">Aplicar al iniciar</string>
-    <string name="dt_free_memory">Memoria mínima</string>
-    <string name="prefcat_free_memory">Memoria libre</string>
-    <string name="pt_free_memory">Memoria libre</string>
-    <string name="ps_free_memory">Cantidad mínima de memoria RAM que debe quedar libre | Valor actual: %s</string>
-    <string name="pt_free_memory_boot">Aplicar al iniciar</string>
-    <string name="ps_free_memory_boot">Aplicar esa cantidad al inicio</string>
-    <string name="pt_fast_charge_boot">Carga rápida</string>
-    <string name="ps_fast_charge_boot">Activa la carga rápida al iniciar</string>
-    <string name="ps_volt_mhz_voltage">" MHz Voltaje"</string>
-    <string name="ps_volt_save">"Guardar"</string>
-    <string name="ps_volt_current_voltage">"Voltaje actual: "</string>
-    <string name="ps_volt_setting_to_apply">"Voltaje a aplicar: "</string>
-    <string name="pt_volt_control">Control de voltaje</string>
-    <string name="ps_volt_control">Establecer voltajes para cada frecuencia</string>
-    <string name="not_supported">Su kernel no soporta el ajuste de voltaje</string>
-    <string name="apply_values">Aplicar valores</string>
-    <string name="freq">Frecuencia</string>
-    <string name="current">mV Actuales</string>
-    <string name="saved">mV Guardados</string>
-    <string name="kernel">Ajustes del kernel (si es soportado)</string>
-    <string name="fast_charge_warning">"¡NO PODRÁ CONECTARSE A SU PC DESPUÉS DE CADA REINICIO!
-
- Esta opción activará la carga rápida en cada reinicio. ¡Mientras la carga rápida esté activada, la función del USB será *exclusivamente* cargar el dispositivo!"</string>
-    <string name="fast_charge_notification_title">¡Carga rápida activada!</string>
-    <string name="fast_charge_notification_message">¡El teléfono se encuentra en modo sólo carga!</string>
-    <string name="prefcat_other_tweaks">Otros ajustes</string>
-    <string name="performance_daily_reboot_title">Reinicio diario</string>
-    <string name="performance_daily_reboot_summary">Reinicio programado: %1$s</string>
-    <string name="performance_daily_reboot_summary_unscheduled">Reinicio no programado</string>
-
-    <!-- Custom vibrations -->
     <string name="vibrations">Vibracion</string>
     <string name="defaultvibrationname">"'por defecto'"</string>
     <string name="vib_new">Nuevo</string>
