@@ -587,8 +587,10 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             bufferedReader = new BufferedReader(inputStreamReader);
             String read = bufferedReader.readLine();
             while (read != null) {
-                sb.append(read);
-                sb.append("\n");
+            	if(read.length()!=0){
+                	sb.append(read);
+                	sb.append("\n");
+                }
                 read = bufferedReader.readLine();
             }
             desc = sb.toString();
