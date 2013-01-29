@@ -291,9 +291,9 @@ public class Navbar extends AOKPPreferenceFragment implements
             Preference preference) {
         if (preference == mEnableNavigationBar) {
 
-            Settings.System.putInt(getActivity().getContentResolver(),
+            Settings.System.putBoolean(getActivity().getContentResolver(),
                     Settings.System.NAVIGATION_BAR_SHOW,
-                    ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
+                    ((CheckBoxPreference) preference).isChecked() ? true : false);
             Helpers.restartSystemUI();
             return true;
         } else if (preference == mEnableNavringLong) {
