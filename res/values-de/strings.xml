@@ -298,7 +298,7 @@
     <string name="signal_color_title">Farbe des Empfangs</string>
     <string name="hide_signal_title">Empfangsleisten verstecken</string>
     <string name="hide_signal_summary">Versteckt aktuell zusätzlich das Symbol für Datenverbindung. Wird später separat verfügbar sein.</string>
-    <string name="wifi_signal_style">WiFi Signal Text Stiel</string>
+    <string name="wifi_signal_style">WiFi Signal Text Stil</string>
     <string name="wifi_signal_color_title">WiFi Signal Farbe</string>
 
     <!-- Color Picker -->
