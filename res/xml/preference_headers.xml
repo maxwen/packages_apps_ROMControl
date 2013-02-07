@@ -91,12 +91,8 @@
         android:id="@+id/vibrations"
         android:title="@string/vibrations"
         android:summary="@string/header_summary_vibrations"
-        android:icon="@drawable/ic_rom_control_vibrations" >
-        <intent
-                android:action="android.intent.action.MAIN"
-                android:targetClass="com.aokp.romcontrol.fragments.Vibrations"
-                android:targetPackage="com.aokp.romcontrol" />
-    </header>
+        android:icon="@drawable/ic_rom_control_vibrations"
+        android:fragment="com.aokp.romcontrol.fragments.Vibrations" />
 
     <header
         android:id="@+id/hardware_keys"
@@ -104,7 +100,6 @@
         android:title="@string/hardware_keys"
         android:icon="@drawable/ic_rom_control_hardware_keys"
         android:summary="@string/header_summary_hardware_keys" />
-
 
     <header
         android:id="@+id/tools"
@@ -117,5 +112,4 @@
                 android:targetClass="com.aokp.romcontrol.performance.Performance"
                 android:targetPackage="com.aokp.romcontrol" />
     </header>
-
 </preference-headers>
