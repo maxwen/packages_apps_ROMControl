@@ -81,7 +81,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     private static final String PREF_LONGPRESS_TO_KILL = "longpress_to_kill";
     private static final String PREF_RECENT_KILL_ALL = "recent_kill_all";
     private static final String PREF_RAM_USAGE_BAR = "ram_usage_bar";
-    private static final String PREF_KILL_APP_LONGPRESS_BACK = "kill_app_longpress_back";
     private static final String PREF_IME_SWITCHER = "ime_switcher";
     private static final String PREF_STATUSBAR_BRIGHTNESS = "statusbar_brightness_slider";
     private static final String PREF_USER_MODE_UI = "user_mode_ui";
@@ -113,7 +112,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     CheckBoxPreference mLongPressToKill;
     CheckBoxPreference mRecentKillAll;
     CheckBoxPreference mRamBar;
-    CheckBoxPreference mKillAppLongpressBack;
     CheckBoxPreference mShowImeSwitcher;
     CheckBoxPreference mStatusbarSliderPreference;
     SeekBarPreference mNavBarAlpha;
@@ -206,9 +204,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                         getApplicationContext().getContentResolver(),
                         Settings.System.UI_FORCE_OVERFLOW_BUTTON, false));
 
-        mKillAppLongpressBack = (CheckBoxPreference) findPreference(PREF_KILL_APP_LONGPRESS_BACK);
-                updateKillAppLongpressBackOptions();
-
         mHideExtras = (CheckBoxPreference) findPreference(PREF_HIDE_EXTRAS);
         mHideExtras.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
                         Settings.System.HIDE_EXTRAS_SYSTEM_BAR, false));
@@ -239,16 +234,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
 
         setHasOptionsMenu(true);
         resetBootAnimation();
-    }
-
-    private void writeKillAppLongpressBackOptions() {
-        Settings.System.putInt(getActivity().getContentResolver(),
-                Settings.System.KILL_APP_LONGPRESS_BACK, mKillAppLongpressBack.isChecked() ? 1 : 0);
-    }
-
-    private void updateKillAppLongpressBackOptions() {
-        mKillAppLongpressBack.setChecked(Settings.System.getInt(getActivity().getContentResolver(),
-                Settings.System.KILL_APP_LONGPRESS_BACK, 0) != 0);
     }
 
     @Override
@@ -458,7 +443,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             Helpers.restartSystemUI();
             return true;
         } else if (preference == mLongPressToKill) {
-
             boolean checked = ((CheckBoxPreference) preference).isChecked();
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.KILL_APP_LONGPRESS_BACK, checked ? 1 : 0);
@@ -472,9 +456,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             boolean checked = ((CheckBoxPreference)preference).isChecked();
             Settings.System.putBoolean(getActivity().getContentResolver(),
                     Settings.System.RAM_USAGE_BAR, checked ? true : false);
-            return true;
-        } else if (preference == mKillAppLongpressBack) {
-            writeKillAppLongpressBackOptions();
             return true;
         } else if (preference == mWakeUpWhenPluggedOrUnplugged) {
             Settings.System.putBoolean(getActivity().getContentResolver(),
