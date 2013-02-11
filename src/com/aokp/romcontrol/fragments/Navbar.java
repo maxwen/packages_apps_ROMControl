@@ -173,8 +173,8 @@ public class Navbar extends AOKPPreferenceFragment implements
         boolean hasNavBarByDefault = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_showNavigationBar);
         mEnableNavigationBar = (CheckBoxPreference) findPreference("enable_nav_bar");
-        mEnableNavigationBar.setChecked(Settings.System.getBoolean(getContentResolver(),
-                Settings.System.NAVIGATION_BAR_SHOW, hasNavBarByDefault));
+        mEnableNavigationBar.setChecked(Settings.System.getInt(getContentResolver(),
+                Settings.System.NAVIGATION_BAR_SHOW, hasNavBarByDefault ? 1 : 0) == 1);
 
         mNavigationColor = (ColorPickerPreference) findPreference(NAVIGATION_BAR_COLOR);
         mNavigationColor.setOnPreferenceChangeListener(this);
@@ -300,13 +300,6 @@ public class Navbar extends AOKPPreferenceFragment implements
             Settings.System.putBoolean(getActivity().getContentResolver(),
                     Settings.System.NAVIGATION_BAR_SHOW,
                     ((CheckBoxPreference) preference).isChecked() ? true : false);
-            
-            // maxwen: sync now setting with this
-            // its just confusing that it doesnt show up if enabled here
-            Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_SHOW_NOW, 
-                    ((CheckBoxPreference) preference).isChecked() ? true : false);
-            
             Helpers.restartSystemUI();
             return true;
         } else if (preference == mColorizeAllIcons) {
