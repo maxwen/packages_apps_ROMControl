@@ -499,6 +499,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             boolean checked = ((CheckBoxPreference)preference).isChecked();
             Settings.System.putBoolean(getActivity().getContentResolver(),
                     Settings.System.NAVIGATION_BAR_STATUS_SHOW_NOW, checked ? true : false);
+            Helpers.restartSystemUI();
             return true;
         }
 
