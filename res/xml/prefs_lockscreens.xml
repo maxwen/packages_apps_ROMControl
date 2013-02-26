@@ -52,6 +52,11 @@
             android:title="@string/lockscreen_use_widget_container_carousel_title"
             android:summary="@string/lockscreen_use_widget_container_carousel_summary" />
 
+        <CheckBoxPreference
+            android:key="lockscreen_hide_statusbar_info"
+            android:title="@string/lockscreen_hide_statusbar_info_title"
+            android:summary="@string/lockscreen_hide_statusbar_info_summary" />
+
     </PreferenceCategory>
     <PreferenceCategory
         android:key="music"

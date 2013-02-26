@@ -79,7 +79,8 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
     private static final String PREF_LOCKSCREEN_MINIMIZE_CHALLENGE = "lockscreen_minimize_challenge";
     private static final String PREF_LOCKSCREEN_USE_CAROUSEL = "lockscreen_use_widget_container_carousel";
     private static final String PREF_LOCKSCREEN_LONGPRESS_CHALLENGE = "lockscreen_longpress_challenge";
-
+    private static final String PREF_LOCKSCREEN_HIDE_STATUSBAR_INFO = "lockscreen_hide_statusbar_info";
+    
     public static final int REQUEST_PICK_WALLPAPER = 199;
     public static final int REQUEST_PICK_CUSTOM_ICON = 200;
     public static final int SELECT_ACTIVITY = 2;
@@ -102,7 +103,8 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
     CheckBoxPreference mLockscreenMinChallenge;
     CheckBoxPreference mLockscreenUseCarousel;
     CheckBoxPreference mLockscreenLongpressChallenge;
-
+    CheckBoxPreference mLockscreenHideStatusbarInfo;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,6 +162,10 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
         mLockscreenLongpressChallenge = (CheckBoxPreference)findPreference(PREF_LOCKSCREEN_LONGPRESS_CHALLENGE);
         mLockscreenLongpressChallenge.setChecked(Settings.System.getBoolean(getActivity().getContentResolver(),
                 Settings.System.LOCKSCREEN_LONGPRESS_CHALLENGE, false));
+
+        mLockscreenHideStatusbarInfo = (CheckBoxPreference)findPreference(PREF_LOCKSCREEN_HIDE_STATUSBAR_INFO);
+        mLockscreenHideStatusbarInfo.setChecked(Settings.System.getBoolean(getActivity().getContentResolver(),
+                Settings.System.NAVIGATION_BAR_STATUS_HIDE_LOCKSCREEN_INFO, false));
 
         if (isTablet(mContext) || isPhablet(mContext)) {
             ((PreferenceGroup)findPreference("layout")).removePreference((Preference)findPreference(PREF_LOCKSCREEN_MINIMIZE_CHALLENGE));
@@ -263,6 +269,11 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.LOCKSCREEN_USE_WIDGET_CONTAINER_CAROUSEL,
                     ((CheckBoxPreference)preference).isChecked() ? 1 : 0);
+            return true;
+        } else if (preference == mLockscreenHideStatusbarInfo) {
+            Settings.System.putBoolean(mContext.getContentResolver(),
+                    Settings.System.NAVIGATION_BAR_STATUS_HIDE_LOCKSCREEN_INFO,
+                    ((CheckBoxPreference) preference).isChecked());
             return true;
         }
 
