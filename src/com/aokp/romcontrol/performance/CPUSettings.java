@@ -38,8 +38,9 @@ import com.aokp.romcontrol.R;
 
 import com.aokp.romcontrol.util.CMDProcessor;
 import com.aokp.romcontrol.util.Helpers;
+import com.aokp.romcontrol.AOKPPreferenceFragment;
 
-public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeListener {
+public class CPUSettings extends AOKPPreferenceFragment implements SeekBar.OnSeekBarChangeListener {
 
     public static final String TAG = "CPUSettings";
 
@@ -109,29 +110,36 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
             curTegraMaxSpeed = "0";
         }
 
-        String curCPU = Helpers.readOneLine(TEGRA_MAX_CPU);
-        int curCPUMax = 0;
-        try {
-            curCPUMax = Integer.parseInt(curCPU);
-        } catch (NumberFormatException ex) {
-            curCPUMax = 4;
-            curCPU = "4";
-        }
-        mCPUMaxSetting = Integer.valueOf(curCPUMax).toString();
-
+        mMaxCPUSlider = (SeekBar) view.findViewById(R.id.max_cpu_slider);
+        	
+		File f=new File(TEGRA_MAX_CPU);
+		if(f.exists() && f.canRead()){
+        	String curCPU = Helpers.readOneLine(TEGRA_MAX_CPU);
+        	int curCPUMax = 0;
+        	try {
+            	curCPUMax = Integer.parseInt(curCPU);
+        	} catch (NumberFormatException ex) {
+            	curCPUMax = 4;
+            	curCPU = "4";
+        	}
+        	mCPUMaxSetting = Integer.valueOf(curCPUMax).toString();
+       
+        	mMaxCPUSlider.setMax(3);
+        	mCPUMaxText = (TextView) view.findViewById(R.id.max_cpu_text);
+        	mCPUMaxText.setText(mCPUMaxSetting);
+        	mMaxCPUSlider.setProgress(Arrays.asList(maxCPUList).indexOf(curCPU));
+        	mMaxCPUSlider.setOnSeekBarChangeListener(this);
+		} else {
+			mMaxCPUSlider.setVisibility(View.GONE);
+			view.findViewById(R.id.max_cpu_info).setVisibility(View.GONE);
+		}
+		
         mFreqMaxSlider = (SeekBar) view.findViewById(R.id.freq_max_slider);
         mFreqMaxSlider.setMax(frequenciesNumWithZero);
-        mFreqMaxText = (TextView) view.findViewById(R.id.freq_max_speed_text);
+       	mFreqMaxText = (TextView) view.findViewById(R.id.freq_max_speed_text);
         mFreqMaxText.setText(toMHz(curTegraMaxSpeed));
         mFreqMaxSlider.setProgress(Arrays.asList(availableFrequenciesWithZero).indexOf(curTegraMaxSpeed));
         mFreqMaxSlider.setOnSeekBarChangeListener(this);
-
-        mMaxCPUSlider = (SeekBar) view.findViewById(R.id.max_cpu_slider);
-        mMaxCPUSlider.setMax(3);
-        mCPUMaxText = (TextView) view.findViewById(R.id.max_cpu_text);
-        mCPUMaxText.setText(mCPUMaxSetting);
-        mMaxCPUSlider.setProgress(Arrays.asList(maxCPUList).indexOf(curCPU));
-        mMaxCPUSlider.setOnSeekBarChangeListener(this);
 
         mEnableOC = (Switch) view.findViewById(R.id.enable_oc);
         mEnableOC.setChecked(preferences.getBoolean(ENABLE_OC, false));
@@ -215,6 +223,9 @@ public class CPUSettings extends Fragment implements SeekBar.OnSeekBarChangeList
     }
 
     public void setMaxCPU(SeekBar seekBar, int progress) {
+    	if(mMaxCPUSlider==null){
+    		return;
+    	}
         String current = "";
         current = maxCPUList[progress];
         int sliderProgress = mMaxCPUSlider.getProgress();

@@ -76,8 +76,11 @@ public class BootService extends Service {
                     cmd.su.runWaitFor("busybox echo " + freqMax +
                             " > " + CPUSettings.TEGRA_MAX_FREQ);
 
-                    cmd.su.runWaitFor("busybox echo " + maxCPU +
+ 					File f=new File(CPUSettings.TEGRA_MAX_CPU);
+					if(f.exists()){
+                   		cmd.su.runWaitFor("busybox echo " + maxCPU +
                             " > " + CPUSettings.TEGRA_MAX_CPU);
+                    }
                           
                     cmd.su.runWaitFor("busybox echo " + enableOC + 
                      		" > " + CPUSettings.TEGRA_ENABLE_OC);
