@@ -872,6 +872,7 @@ s will display</string>
     <string name="circlemod">CircleMOD</string>
     <string name="status_bar_battery_status_cyanogenmod_circle">CyanogenMod Circle</string>
     <string name="status_bar_battery_status_cyanogenmod_circle_percentage">CyanogenMod Circle with percentage</string>
+    <string name="status_bar_battery_status_dotted_circle">Dotted Circle with percentage</string>
 
     <!-- NavBar -->
     <string name="right">Right</string>
