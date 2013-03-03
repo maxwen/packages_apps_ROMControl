@@ -23,7 +23,21 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
     private static final String PREF_BATT_BAR_WIDTH = "battery_bar_thickness";
     private static final String PREF_BATT_ANIMATE = "battery_bar_animate";
 
+    private static final String STATUS_BAR_CIRCLE_BATTERY_COLOR = "status_bar_circle_battery_color";
+    private static final String STATUS_BAR_CIRCLE_BATTERY_TEXT_COLOR = "status_bar_circle_battery_text_color";
+    private static final String STATUS_BAR_CIRCLE_BATTERY_ANIMATIONSPEED = "status_bar_circle_battery_animationspeed";
+
+    private static final String PREF_CIRCLE_COLOR_RESET = "circle_battery_reset";
+    private static final String PREF_STATUS_BAR_CIRCLE_BATTERY_COLOR = "circle_battery_color";
+    private static final String PREF_STATUS_BAR_CIRCLE_BATTERY_TEXT_COLOR = "circle_battery_text_color";
+    private static final String PREF_STATUS_BAR_CIRCLE_BATTERY_ANIMATIONSPEED = "circle_battery_animation_speed";
+
     ListPreference mBatteryIcon;
+    ColorPickerPreference mCircleColor;
+    ColorPickerPreference mCircleTextColor;
+    ListPreference mCircleAnimSpeed;
+    Preference mCircleColorReset;
+
     ListPreference mBatteryBar;
     ListPreference mBatteryBarStyle;
     ListPreference mBatteryBarThickness;
@@ -34,6 +48,11 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.title_statusbar_battery);
+
+        int defaultColor;
+        int intColor;
+        String hexColor;
+
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.prefs_statusbar_battery);
 
@@ -43,6 +62,32 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
                 .getContentResolver(), Settings.System.STATUSBAR_BATTERY_ICON,
                 0))
                 + "");
+
+        mCircleColor = (ColorPickerPreference) findPreference(PREF_STATUS_BAR_CIRCLE_BATTERY_COLOR);
+        mCircleColor.setOnPreferenceChangeListener(this);
+        defaultColor = getResources().getColor(
+                com.android.internal.R.color.holo_blue_dark);
+        intColor = Settings.System.getInt(getActivity().getContentResolver(),
+                    Settings.System.STATUS_BAR_CIRCLE_BATTERY_COLOR, defaultColor);
+        hexColor = String.format("#%08x", (0xffffffff & intColor));
+        mCircleColor.setSummary(hexColor);
+
+        mCircleTextColor = (ColorPickerPreference) findPreference(PREF_STATUS_BAR_CIRCLE_BATTERY_TEXT_COLOR);
+        mCircleTextColor.setOnPreferenceChangeListener(this);
+        defaultColor = getResources().getColor(
+                com.android.internal.R.color.holo_blue_dark);
+        intColor = Settings.System.getInt(getActivity().getContentResolver(),
+                    Settings.System.STATUS_BAR_CIRCLE_BATTERY_TEXT_COLOR, defaultColor);
+        hexColor = String.format("#%08x", (0xffffffff & intColor));
+        mCircleTextColor.setSummary(hexColor);
+
+        mCircleAnimSpeed = (ListPreference) findPreference(PREF_STATUS_BAR_CIRCLE_BATTERY_ANIMATIONSPEED);
+        mCircleAnimSpeed.setOnPreferenceChangeListener(this);
+        mCircleAnimSpeed.setValue((Settings.System
+                .getInt(getActivity().getContentResolver(),
+                        Settings.System.STATUS_BAR_CIRCLE_BATTERY_ANIMATIONSPEED, 3))
+                + "");
+        mCircleAnimSpeed.setSummary(mCircleAnimSpeed.getEntry());
 
         mBatteryBar = (ListPreference) findPreference(PREF_BATT_BAR);
         mBatteryBar.setOnPreferenceChangeListener(this);
@@ -72,6 +117,14 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
                 .getContentResolver(),
                 Settings.System.STATUSBAR_BATTERY_BAR_THICKNESS, 1))
                 + "");
+
+        mCircleColorReset = (Preference) findPreference(PREF_CIRCLE_COLOR_RESET);
+        if (Settings.System.getInt(getActivity().getContentResolver(),
+                    Settings.System.STATUS_BAR_CIRCLE_BATTERY_RESET, 0) == 1) {
+            circleColorReset();
+        }
+
+        updateBatteryIconOptions();
     }
 
     @Override
@@ -82,6 +135,11 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.STATUSBAR_BATTERY_BAR_ANIMATE,
                     ((CheckBoxPreference) preference).isChecked() ? 1 : 0);
+            return true;
+        } else if (preference == mCircleColorReset) {
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.STATUS_BAR_CIRCLE_BATTERY_RESET, 1);
+            circleColorReset();
             return true;
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
@@ -94,6 +152,27 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
             int val = Integer.parseInt((String) newValue);
             return Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.STATUSBAR_BATTERY_ICON, val);
+        } else if (preference == mCircleColor) {
+            String hex = ColorPickerPreference.convertToARGB(Integer
+                    .valueOf(String.valueOf(newValue)));
+            preference.setSummary(hex);
+
+            int intHex = ColorPickerPreference.convertToColorInt(hex);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.STATUS_BAR_CIRCLE_BATTERY_COLOR, intHex);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.STATUS_BAR_CIRCLE_BATTERY_RESET, 0);
+            return true;
+        } else if (preference == mCircleTextColor) {
+            String hex = ColorPickerPreference.convertToARGB(Integer
+                    .valueOf(String.valueOf(newValue)));
+            preference.setSummary(hex);
+
+            int intHex = ColorPickerPreference.convertToColorInt(hex);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.STATUS_BAR_CIRCLE_BATTERY_TEXT_COLOR, intHex);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.STATUS_BAR_CIRCLE_BATTERY_RESET, 0);
         } else if (preference == mBatteryBarColor) {
             String hex = ColorPickerPreference.convertToARGB(Integer
                     .valueOf(String.valueOf(newValue)));
@@ -102,6 +181,13 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
             int intHex = ColorPickerPreference.convertToColorInt(hex);
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.STATUSBAR_BATTERY_BAR_COLOR, intHex);
+            return true;
+        } else if (preference == mCircleAnimSpeed) {
+            int val = Integer.parseInt((String) newValue);
+            int index = mCircleAnimSpeed.findIndexOfValue((String) newValue);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.STATUS_BAR_CIRCLE_BATTERY_ANIMATIONSPEED, val);
+            mCircleAnimSpeed.setSummary(mCircleAnimSpeed.getEntries()[index]);
             return true;
 
         } else if (preference == mBatteryBar) {
@@ -126,4 +212,37 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
         return false;
     }
 
+    private void circleColorReset() {
+        int defaultColor = getResources().getColor(
+                com.android.internal.R.color.holo_blue_dark);
+        Settings.System.putInt(getActivity().getContentResolver(),
+                Settings.System.STATUS_BAR_CIRCLE_BATTERY_COLOR, defaultColor);
+        Settings.System.putInt(getActivity().getContentResolver(),
+                Settings.System.STATUS_BAR_CIRCLE_BATTERY_TEXT_COLOR, defaultColor);
+        String hexColor = String.format("#%08x", (0xffffffff & defaultColor));
+        mCircleColor.setSummary(hexColor);
+        mCircleTextColor.setSummary(hexColor);
+    }
+
+    private void updateBatteryIconOptions() {
+        int batteryIconStat = Settings.System.getInt(getActivity().getContentResolver(),
+               Settings.System.STATUSBAR_BATTERY_ICON, 0);
+
+        if (batteryIconStat == 0 || batteryIconStat == 1 || batteryIconStat == 5) {
+            mCircleColor.setEnabled(false);
+            mCircleTextColor.setEnabled(false);
+            mCircleAnimSpeed.setEnabled(false);
+            mCircleColorReset.setEnabled(false);
+        } else if (batteryIconStat == 2) {
+            mCircleColor.setEnabled(true);
+            mCircleTextColor.setEnabled(false);
+            mCircleAnimSpeed.setEnabled(true);
+            mCircleColorReset.setEnabled(true);
+        } else {
+            mCircleColor.setEnabled(true);
+            mCircleTextColor.setEnabled(true);
+            mCircleAnimSpeed.setEnabled(true);
+            mCircleColorReset.setEnabled(true);
+        }
+    }
 }

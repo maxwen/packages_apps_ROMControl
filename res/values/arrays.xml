@@ -178,6 +178,20 @@
 	<item>8</item>
     </string-array>
 
+    <string-array name="circle_battery_animation_speed_entries" >
+        <item>@string/circle_battery_animation_speed_none</item>
+        <item>@string/circle_battery_animation_speed_slow</item>
+        <item>@string/circle_battery_animation_speed_stock</item>
+        <item>@string/circle_battery_animation_speed_fast</item>
+    </string-array>
+
+    <string-array name="circle_battery_animation_speed_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
+    </string-array>
+
     <!-- NavBar -->
     <string-array name="pref_navigation_menu_entries" translatable="false">
         <item>@string/right</item>
