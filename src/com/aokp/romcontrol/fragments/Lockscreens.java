@@ -167,7 +167,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
         mLockscreenHideStatusbarInfo.setChecked(Settings.System.getBoolean(getActivity().getContentResolver(),
                 Settings.System.NAVIGATION_BAR_STATUS_HIDE_LOCKSCREEN_INFO, false));
 
-        if (isTablet(mContext) || isPhablet(mContext)) {
+        if (isSW600DPScreen(mContext)) {
             ((PreferenceGroup)findPreference("layout")).removePreference((Preference)findPreference(PREF_LOCKSCREEN_MINIMIZE_CHALLENGE));
             ((PreferenceGroup)findPreference("layout")).removePreference((Preference)findPreference(PREF_LOCKSCREEN_LONGPRESS_CHALLENGE));
         }
