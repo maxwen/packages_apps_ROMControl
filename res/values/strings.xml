@@ -879,7 +879,8 @@ s will display</string>
     <string name="circlemod">CircleMOD</string>
     <string name="status_bar_battery_status_cyanogenmod_circle">CyanogenMod Circle</string>
     <string name="status_bar_battery_status_cyanogenmod_circle_percentage">CyanogenMod Circle with percentage</string>
-    <string name="status_bar_battery_status_dotted_circle">Dotted Circle with percentage</string>
+    <string name="status_bar_battery_status_dotted_circle_percentage">Dotted Circle with percentage</string>
+    <string name="status_bar_battery_status_dotted_circle">Dotted Circle</string>
     <string name="circle_battery_color">Circle color</string>
     <string name="circle_battery_text_color">Circle text color</string>
     <string name="circle_battery_animation_speed">Circle animation speed</string>
