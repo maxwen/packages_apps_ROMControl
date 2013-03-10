@@ -31,12 +31,14 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
     private static final String PREF_STATUS_BAR_CIRCLE_BATTERY_COLOR = "circle_battery_color";
     private static final String PREF_STATUS_BAR_CIRCLE_BATTERY_TEXT_COLOR = "circle_battery_text_color";
     private static final String PREF_STATUS_BAR_CIRCLE_BATTERY_ANIMATIONSPEED = "circle_battery_animation_speed";
+    private static final String KEY_LOW_BATTERY_WARNING_POLICY = "pref_low_battery_warning_policy";
 
     ListPreference mBatteryIcon;
     ColorPickerPreference mCircleColor;
     ColorPickerPreference mCircleTextColor;
     ListPreference mCircleAnimSpeed;
     Preference mCircleColorReset;
+    ListPreference mLowBatteryWarning;
 
     ListPreference mBatteryBar;
     ListPreference mBatteryBarStyle;
@@ -124,6 +126,13 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
             circleColorReset();
         }
 
+        mLowBatteryWarning = (ListPreference) findPreference(KEY_LOW_BATTERY_WARNING_POLICY);
+        int lowBatteryWarning = Settings.System.getInt(getActivity().getContentResolver(),
+                                    Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY, 0);
+        mLowBatteryWarning.setValue(String.valueOf(lowBatteryWarning));
+        mLowBatteryWarning.setSummary(mLowBatteryWarning.getEntry());
+        mLowBatteryWarning.setOnPreferenceChangeListener(this);
+
         updateBatteryIconOptions();
     }
 
@@ -173,6 +182,14 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
                     Settings.System.STATUS_BAR_CIRCLE_BATTERY_TEXT_COLOR, intHex);
             Settings.System.putInt(getActivity().getContentResolver(),
                     Settings.System.STATUS_BAR_CIRCLE_BATTERY_RESET, 0);
+        } else if (preference == mLowBatteryWarning) {
+            int lowBatteryWarning = Integer.valueOf((String) newValue);
+            int index = mLowBatteryWarning.findIndexOfValue((String) newValue);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.POWER_UI_LOW_BATTERY_WARNING_POLICY,
+                    lowBatteryWarning);
+            mLowBatteryWarning.setSummary(mLowBatteryWarning.getEntries()[index]);
+            return true;
         } else if (preference == mBatteryBarColor) {
             String hex = ColorPickerPreference.convertToARGB(Integer
                     .valueOf(String.valueOf(newValue)));
