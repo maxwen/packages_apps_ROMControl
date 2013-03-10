@@ -315,7 +315,9 @@ public class StatusBarToggles extends AOKPPreferenceFragment implements
 
             String[] splitter = userToggles.split("\\|");
             for (String toggle : splitter) {
-                userEnabledToggles.add(toggle);
+            	if(toggle.length()!=0){
+                	userEnabledToggles.add(toggle);
+                }
             }
             return userEnabledToggles;
         } catch (Exception e) {
@@ -336,8 +338,10 @@ public class StatusBarToggles extends AOKPPreferenceFragment implements
             b.append(_toggle);
             b.append("|");
         }
-        if (String.valueOf(b.charAt(b.length() - 1)).equals("!")) {
-            b.deleteCharAt(b.length() - 1);
+        if (b.length()!=0){
+        	if (String.valueOf(b.charAt(b.length() - 1)).equals("|")) {
+            	b.deleteCharAt(b.length() - 1);
+            }
         }
         Log.d(TAG, "saving toggles:" + b.toString());
         Settings.System.putString(c.getContentResolver(), Settings.System.QUICK_TOGGLES,
