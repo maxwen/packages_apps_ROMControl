@@ -57,10 +57,10 @@
             android:title="@string/brightness_slider_title"
             android:summary="@string/brightness_slider_summary" />
             
-        <CheckBoxPreference
+        <!--<CheckBoxPreference
             android:key="navigation_bar_status_show_now"
             android:title="@string/statusbar_hide_title"
-            android:summary="@string/statusbar_hide_summary" />
+            android:summary="@string/statusbar_hide_summary" />-->
 
         <Preference
             android:key="transparency_dialog"
