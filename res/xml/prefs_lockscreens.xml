@@ -94,6 +94,11 @@
                 android:title="@string/lockscreen_auto_rotate_title"
                 android:summary="@string/lockscreen_auto_rotate_summary" />
 
+            <CheckBoxPreference
+                android:key="see_through"
+                android:title="@string/lockscreen_seethrough"
+                android:summary="@string/lockscreen_seethrough_summary" /> 
+
     </PreferenceCategory>
 
     <PreferenceCategory

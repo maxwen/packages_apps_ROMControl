@@ -1055,4 +1055,7 @@ s will display</string>
     <string name="max_cpu_num">Max CPU number:</string>   
     <string name="enable_oc">Enable CPU 4x1.7Ghz:</string>   
    
+   <!-- Lockscreen See Through -->
+   <string name="lockscreen_seethrough">Lockscreen See through</string>
+   <string name="lockscreen_seethrough_summary">Allows you to see your homescreen behind the lock screen including apps.</string> 
 </resources>
