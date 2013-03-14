@@ -33,6 +33,9 @@ public class HardwareKeys extends AOKPPreferenceFragment implements OnPreference
 
     private static final String HARDWARE_KEYS_CATEGORY_BINDINGS = "hardware_keys_bindings";
     private static final String HARDWARE_KEYS_ENABLE_CUSTOM = "hardware_keys_enable_custom";
+    private static final String HARDWARE_KEYS_BACK_PRESS = "hardware_keys_back_press";
+    private static final String HARDWARE_KEYS_BACK_LONG_PRESS = "hardware_keys_back_long_press";
+    private static final String HARDWARE_KEYS_HOME_PRESS = "hardware_keys_home_press";
     private static final String HARDWARE_KEYS_HOME_LONG_PRESS = "hardware_keys_home_long_press";
     private static final String HARDWARE_KEYS_MENU_PRESS = "hardware_keys_menu_press";
     private static final String HARDWARE_KEYS_MENU_LONG_PRESS = "hardware_keys_menu_long_press";
@@ -42,15 +45,18 @@ public class HardwareKeys extends AOKPPreferenceFragment implements OnPreference
     private static final String HARDWARE_KEYS_APP_SWITCH_LONG_PRESS = "hardware_keys_app_switch_long_press";
 
     // Available custom actions to perform on a key press.
-    // Must match values for KEY_HOME_LONG_PRESS_ACTION in:
-    // frameworks/base/core/java/android/provider/Settings.java
     private static final int ACTION_NOTHING = 0;
     private static final int ACTION_MENU = 1;
     private static final int ACTION_APP_SWITCH = 2;
     private static final int ACTION_SEARCH = 3;
     private static final int ACTION_VOICE_SEARCH = 4;
     private static final int ACTION_IN_APP_SEARCH = 5;
-
+    private static final int ACTION_HOME = 6;
+    private static final int ACTION_BACK = 7;
+    private static final int ACTION_LAST_APP = 8;
+    private static final int ACTION_KILL_APP = 9;
+    private static final int ACTION_NOTIFICATIONS = 10;
+                
     // Masks for checking presence of hardware keys.
     // Must match values in frameworks/base/core/res/res/values/config.xml
     private static final int KEY_MASK_HOME = 0x01;
@@ -60,6 +66,9 @@ public class HardwareKeys extends AOKPPreferenceFragment implements OnPreference
     private static final int KEY_MASK_APP_SWITCH = 0x10;
 
     private CheckBoxPreference mEnableCustomBindings;
+    private ListPreference mBackPressAction;    
+    private ListPreference mBackLongPressAction;    
+    private ListPreference mHomePressAction;
     private ListPreference mHomeLongPressAction;
     private ListPreference mMenuPressAction;
     private ListPreference mMenuLongPressAction;
@@ -75,6 +84,7 @@ public class HardwareKeys extends AOKPPreferenceFragment implements OnPreference
 
         final int deviceKeys = getResources().getInteger(
                 com.android.internal.R.integer.config_deviceHardwareKeys);
+        final boolean hasBackKey = (deviceKeys & KEY_MASK_BACK) != 0;
         final boolean hasHomeKey = (deviceKeys & KEY_MASK_HOME) != 0;
         final boolean hasMenuKey = (deviceKeys & KEY_MASK_MENU) != 0;
         final boolean hasAssistKey = (deviceKeys & KEY_MASK_ASSIST) != 0;
@@ -85,6 +95,12 @@ public class HardwareKeys extends AOKPPreferenceFragment implements OnPreference
 
         mEnableCustomBindings = (CheckBoxPreference) prefSet.findPreference(
                 HARDWARE_KEYS_ENABLE_CUSTOM);
+        mBackPressAction = (ListPreference) prefSet.findPreference(
+                HARDWARE_KEYS_BACK_PRESS);
+        mBackLongPressAction = (ListPreference) prefSet.findPreference(
+                HARDWARE_KEYS_BACK_LONG_PRESS);
+        mHomePressAction = (ListPreference) prefSet.findPreference(
+                HARDWARE_KEYS_HOME_PRESS);
         mHomeLongPressAction = (ListPreference) prefSet.findPreference(
                 HARDWARE_KEYS_HOME_LONG_PRESS);
         mMenuPressAction = (ListPreference) prefSet.findPreference(
@@ -102,7 +118,33 @@ public class HardwareKeys extends AOKPPreferenceFragment implements OnPreference
         PreferenceCategory bindingsCategory = (PreferenceCategory) prefSet.findPreference(
                 HARDWARE_KEYS_CATEGORY_BINDINGS);
 
+        if (hasBackKey) {
+            int backPressAction = Settings.System.getInt(getContentResolver(),
+                    Settings.System.KEY_BACK_ACTION, ACTION_BACK);
+                    
+            mBackPressAction.setValue(Integer.toString(backPressAction));
+            mBackPressAction.setSummary(mBackPressAction.getEntry());
+            mBackPressAction.setOnPreferenceChangeListener(this);
+
+            int backLongPressAction = Settings.System.getInt(getContentResolver(),
+                    Settings.System.KEY_BACK_LONG_PRESS_ACTION, ACTION_NOTHING);
+
+            mBackLongPressAction.setValue(Integer.toString(backLongPressAction));
+            mBackLongPressAction.setSummary(mBackLongPressAction.getEntry());
+            mBackLongPressAction.setOnPreferenceChangeListener(this);
+        } else {
+            bindingsCategory.removePreference(mBackPressAction);
+            bindingsCategory.removePreference(mBackLongPressAction);
+        }
+
         if (hasHomeKey) {
+            int homePressAction = Settings.System.getInt(getContentResolver(),
+                    Settings.System.KEY_HOME_ACTION, ACTION_HOME);
+
+            mHomePressAction.setValue(Integer.toString(homePressAction));
+            mHomePressAction.setSummary(mHomePressAction.getEntry());
+            mHomePressAction.setOnPreferenceChangeListener(this);
+
             int homeLongPressAction;
             if (hasAppSwitchKey) {
                 homeLongPressAction = Settings.System.getInt(getContentResolver(),
@@ -115,6 +157,7 @@ public class HardwareKeys extends AOKPPreferenceFragment implements OnPreference
             mHomeLongPressAction.setSummary(mHomeLongPressAction.getEntry());
             mHomeLongPressAction.setOnPreferenceChangeListener(this);
         } else {
+            bindingsCategory.removePreference(mHomePressAction);
             bindingsCategory.removePreference(mHomeLongPressAction);
         }
 
@@ -181,7 +224,31 @@ public class HardwareKeys extends AOKPPreferenceFragment implements OnPreference
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        if (preference == mHomeLongPressAction) {
+        if (preference == mBackPressAction) {
+            int value = Integer.valueOf((String) newValue);
+            int index = mBackPressAction.findIndexOfValue((String) newValue);
+            mBackPressAction.setSummary(
+                    mBackPressAction.getEntries()[index]);
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.KEY_BACK_ACTION, value);
+            return true;
+        } else if (preference == mBackLongPressAction) {
+            int value = Integer.valueOf((String) newValue);
+            int index = mBackLongPressAction.findIndexOfValue((String) newValue);
+            mBackLongPressAction.setSummary(
+                    mBackLongPressAction.getEntries()[index]);
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.KEY_BACK_LONG_PRESS_ACTION, value);
+            return true;
+        } else if (preference == mHomePressAction) {
+            int value = Integer.valueOf((String) newValue);
+            int index = mHomePressAction.findIndexOfValue((String) newValue);
+            mHomePressAction.setSummary(
+                    mHomePressAction.getEntries()[index]);
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.KEY_HOME_ACTION, value);
+            return true;
+        } else if (preference == mHomeLongPressAction) {
             int value = Integer.valueOf((String) newValue);
             int index = mHomeLongPressAction.findIndexOfValue((String) newValue);
             mHomeLongPressAction.setSummary(

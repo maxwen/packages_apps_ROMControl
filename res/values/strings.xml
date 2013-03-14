@@ -1036,6 +1036,9 @@ s will display</string>
     <!-- Hardware keys -->
     <string name="hardware_keys_bindings_title">Key actions</string>
     <string name="hardware_keys_enable_custom_title">Enable custom actions</string>
+    <string name="hardware_keys_back_press_title">Back key</string>
+    <string name="hardware_keys_back_long_press_title">Back key (long press)</string>
+    <string name="hardware_keys_home_press_title">Home key</string>
     <string name="hardware_keys_home_long_press_title">Home key (long press)</string>
     <string name="hardware_keys_menu_press_title">Menu key</string>
     <string name="hardware_keys_menu_long_press_title">Menu key (long press)</string>
@@ -1049,8 +1052,11 @@ s will display</string>
     <string name="hardware_keys_action_search">Search assistant</string>
     <string name="hardware_keys_action_voice_search">Voice search</string>
     <string name="hardware_keys_action_in_app_search">In-app search</string>
-    <string name="hardware_keys_additional_options">Additional options</string>
-
+    <string name="hardware_keys_action_home">Home button</string>
+    <string name="hardware_keys_action_back">Back button</string>
+    <string name="hardware_keys_action_last_app">Switch to last app</string>
+    <string name="hardware_keys_action_kill_app">Kill app</string>
+    <string name="hardware_keys_action_notifications">Notification shade toggle</string>            
     <!-- Performance -->
     <string name="freq_max_speed">Max frequency:</string>   
     <string name="max_cpu_num">Max CPU number:</string>   

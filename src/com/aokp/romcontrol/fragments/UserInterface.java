@@ -88,7 +88,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     private static final CharSequence PREF_NOTIFICATION_SHOW_WIFI_SSID = "notification_show_wifi_ssid";
     private static final CharSequence PREF_SHOW_OVERFLOW = "show_overflow";
     private static final CharSequence PREF_VIBRATE_NOTIF_EXPAND = "vibrate_notif_expand";
-    private static final CharSequence PREF_LONGPRESS_TO_KILL = "longpress_to_kill";
     private static final CharSequence PREF_RECENT_KILL_ALL = "recent_kill_all";
     private static final CharSequence PREF_RAM_USAGE_BAR = "ram_usage_bar";
     private static final CharSequence PREF_IME_SWITCHER = "ime_switcher";
@@ -97,7 +96,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     private static final CharSequence PREF_HIDE_EXTRAS = "hide_extras";
     private static final CharSequence PREF_WAKEUP_WHEN_PLUGGED_UNPLUGGED = "wakeup_when_plugged_unplugged";
     private static final CharSequence PREF_FORCE_DUAL_PANEL = "force_dualpanel";
-    //private static final CharSequence NAVIGATION_BAR_STATUS_SHOW_NOW = "navigation_bar_status_show_now";
     private static final CharSequence PREF_DISABLE_BOOTANIM = "disable_bootanimation";
     private static final CharSequence PREF_CUSTOM_BOOTANIM = "custom_bootanimation";
     private static final CharSequence PREF_NOTIFICATION_VIBRATE = "notification";
@@ -126,7 +124,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     TextView mError;
     CheckBoxPreference mShowActionOverflow;
     CheckBoxPreference mVibrateOnExpand;
-    CheckBoxPreference mLongPressToKill;
     CheckBoxPreference mRecentKillAll;
     CheckBoxPreference mRamBar;
     CheckBoxPreference mShowImeSwitcher;
@@ -136,7 +133,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     CheckBoxPreference mHideExtras;
     CheckBoxPreference mWakeUpWhenPluggedOrUnplugged;
     CheckBoxPreference mDualpane;
-    //CheckBoxPreference mStatusBarHide;
     ListPreference mCrtMode;
     CheckBoxPreference mCrtOff;
 
@@ -218,13 +214,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             ((PreferenceGroup)findPreference(PREF_NOTIFICATION_VIBRATE)).removePreference(mVibrateOnExpand);
         }
 
-        mLongPressToKill = (CheckBoxPreference)findPreference(PREF_LONGPRESS_TO_KILL);
-        mLongPressToKill.setChecked(Settings.System.getInt(mContentResolver,
-                Settings.System.KILL_APP_LONGPRESS_BACK, 0) == 1);
-        if (!hasHardwareButtons) {
-            ((PreferenceGroup)findPreference(PREF_NAVBAR)).removePreference(mLongPressToKill);
-        }
-
         mRecentKillAll = (CheckBoxPreference) findPreference(PREF_RECENT_KILL_ALL);
         mRecentKillAll.setChecked(Settings.System.getBoolean(mContentResolver,
                 Settings.System.RECENT_KILL_ALL_BUTTON, false));
@@ -244,11 +233,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         mHideExtras = (CheckBoxPreference) findPreference(PREF_HIDE_EXTRAS);
         mHideExtras.setChecked(Settings.System.getBoolean(mContext.getContentResolver(),
                         Settings.System.HIDE_EXTRAS_SYSTEM_BAR, false));
-        
-        /*mStatusBarHide = (CheckBoxPreference) findPreference(NAVIGATION_BAR_STATUS_SHOW_NOW);
-        mStatusBarHide.setChecked(Settings.System.getBoolean(mContentResolver,
-                Settings.System.NAVIGATION_BAR_STATUS_SHOW_NOW, false));*/
-        
+                
         mUserModeUI = (ListPreference) findPreference(PREF_USER_MODE_UI);
         int uiMode = Settings.System.getInt(mContentResolver,
                 Settings.System.CURRENT_UI_MODE, 0);
@@ -509,11 +494,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                     ((TwoStatePreference) preference).isChecked());
             Helpers.restartSystemUI();
             return true;
-        } else if (preference == mLongPressToKill) {
-            boolean checked = ((TwoStatePreference) preference).isChecked();
-            Settings.System.putBoolean(mContentResolver,
-                    Settings.System.KILL_APP_LONGPRESS_BACK, checked);
-            return true;
         } else if (preference == mRecentKillAll) {
             boolean checked = ((TwoStatePreference) preference).isChecked();
             Settings.System.putBoolean(mContentResolver,
@@ -531,12 +511,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         } else if ("transparency_dialog".equals(preference.getKey())) {
             openTransparencyDialog();
             return true;
-        /*} else if (preference == mStatusBarHide) {
-            boolean checked = ((CheckBoxPreference)preference).isChecked();
-            Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.NAVIGATION_BAR_STATUS_SHOW_NOW, checked ? true : false);
-            Helpers.restartSystemUI();
-            return true;*/
         } else if (preference == mCrtOff) {
             Settings.System.putBoolean(mContentResolver,
                     Settings.System.SYSTEM_POWER_ENABLE_CRT_OFF,
