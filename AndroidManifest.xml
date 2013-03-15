@@ -152,14 +152,14 @@
                 <category android:name="com.aokp.romcontrol.SHORTCUT"/>
             </intent-filter>
         </activity>
-        <activity
+        <!--<activity
             android:name=".performance.Performance"
             android:label="@string/title_performance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.aokp.romcontrol.SHORTCUT" />
             </intent-filter>
-        </activity>
+        </activity>-->
         <activity
             android:name=".ShareToClipboard"
             android:icon="@drawable/ic_menu_clipboard"

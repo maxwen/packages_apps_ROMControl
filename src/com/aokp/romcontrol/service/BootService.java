@@ -20,7 +20,7 @@ import java.util.List;
 
 import com.aokp.romcontrol.R;
 
-import com.aokp.romcontrol.performance.CPUSettings;
+//import com.aokp.romcontrol.performance.CPUSettings;
 import com.aokp.romcontrol.util.CMDProcessor;
 import com.aokp.romcontrol.util.Helpers;
 
@@ -64,7 +64,7 @@ public class BootService extends Service {
                     || FlipService.getUserCallSilent(c) != 0)
                 c.startService(new Intent(c, FlipService.class));
 
-            if (preferences.getBoolean(CPUSettings.SOB, false)) {
+            /*if (preferences.getBoolean(CPUSettings.SOB, false)) {
                 final String freqMax = preferences.getString(
                         CPUSettings.FREQ_MAX, null);
                 final String maxCPU = preferences.getString(
@@ -85,7 +85,7 @@ public class BootService extends Service {
                     cmd.su.runWaitFor("busybox echo " + enableOC + 
                      		" > " + CPUSettings.TEGRA_ENABLE_OC);
                 }
-            }
+            }*/
 
             return null;
         }
