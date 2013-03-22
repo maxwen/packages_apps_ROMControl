@@ -48,6 +48,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Toast;
+import android.app.admin.DevicePolicyManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,7 +82,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
     private static final String PREF_LOCKSCREEN_LONGPRESS_CHALLENGE = "lockscreen_longpress_challenge";
     private static final String PREF_LOCKSCREEN_HIDE_STATUSBAR_INFO = "lockscreen_hide_statusbar_info";
     private static final String KEY_SEE_TRHOUGH = "see_through";
-    private static final String PREF_LOCKSCREEN_CAMERA_WIDHET_SHOW = "camera_widget";
+    private static final String PREF_LOCKSCREEN_CAMERA_WIDGET_HIDE = "camera_widget_hide";
     
     public static final int REQUEST_PICK_WALLPAPER = 199;
     public static final int REQUEST_PICK_CUSTOM_ICON = 200;
@@ -107,7 +108,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
     CheckBoxPreference mLockscreenLongpressChallenge;
     CheckBoxPreference mLockscreenHideStatusbarInfo;
     CheckBoxPreference mSeeThrough;
-    CheckBoxPreference mCameraWidget;
+    CheckBoxPreference mCameraWidgetHide;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -175,9 +176,19 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
         mSeeThrough.setChecked(Settings.System.getBoolean(mContentRes,
                 Settings.System.LOCKSCREEN_SEE_THROUGH, false));
 
-        mCameraWidget = (CheckBoxPreference)findPreference(PREF_LOCKSCREEN_CAMERA_WIDHET_SHOW);
-        mCameraWidget.setChecked(Settings.System.getBoolean(mContentRes,
+		boolean mCameraDisabled = false;
+        DevicePolicyManager dpm =
+            (DevicePolicyManager) mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        if (dpm != null) {
+            mCameraDisabled = dpm.getCameraDisabled(null);
+        }
+        if (!mCameraDisabled){
+        	mCameraWidgetHide = (CheckBoxPreference)findPreference(PREF_LOCKSCREEN_CAMERA_WIDGET_HIDE);
+        	mCameraWidgetHide.setChecked(Settings.System.getBoolean(mContentRes,
                 Settings.System.CAMERA_WIDGET_HIDE, false)); 
+        } else {
+            ((PreferenceGroup)findPreference("misc")).removePreference((CheckBoxPreference)findPreference(PREF_LOCKSCREEN_CAMERA_WIDGET_HIDE));
+        }
 
         if (isSW600DPScreen(mContext)) {
             ((PreferenceGroup)findPreference("layout")).removePreference((Preference)findPreference(PREF_LOCKSCREEN_MINIMIZE_CHALLENGE));
@@ -292,7 +303,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
                     Settings.System.LOCKSCREEN_SEE_THROUGH, 
                     ((CheckBoxPreference)preference).isChecked() ? 1 : 0);
             return true;
-        } else if (preference == mCameraWidget) {
+        } else if (preference == mCameraWidgetHide) {
             Settings.System.putBoolean(mContext.getContentResolver(),
                     Settings.System.CAMERA_WIDGET_HIDE, 
                     ((CheckBoxPreference) preference).isChecked());

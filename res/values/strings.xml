@@ -1063,10 +1063,10 @@ s will display</string>
     <string name="enable_oc">Enable CPU 4x1.7Ghz:</string>   
    
    <!-- Lockscreen See Through -->
-   <string name="lockscreen_seethrough">Lockscreen See through</string>
+   <string name="lockscreen_seethrough">Lockscreen see-through</string>
    <string name="lockscreen_seethrough_summary">Allows you to see your homescreen behind the lock screen including apps.</string> 
 
     <!-- Camera lockscreen widget -->
-    <string name="camera_widget">Lockscreen Camera widget</string>
-    <string name="camera_widget_summary">Allows you to disable camera widget in losckscreen.</string>
+    <string name="camera_widget_hide">Disable lockscreen camera</string>
+    <string name="camera_widget_hide_summary">Allows you to disable camera widget in lockscreen.</string>
 </resources>
