@@ -594,6 +594,10 @@ s will display</string>
     <string name="lockscreen_hide_statusbar_info_title">Hide statusbar information</string>
     <string name="lockscreen_hide_statusbar_info_summary">Hide statusbar clock and system information on lockscreen</string>
 
+    <!-- Lockscreen See Through -->
+    <string name="lockscreen_seethrough_title">Lockscreen See through</string>
+    <string name="lockscreen_seethrough_summary">Allows you to see your homescreen behind the lock screen including apps.</string> 
+
     <!-- Lockscreen Targets-->
     <string name="lockscreen_targets_title">Lockscreen targets</string>
     <string name="lockscreen_targets_summary">Lockscreen targets summary…</string>
@@ -999,8 +1003,4 @@ s will display</string>
     <string name="freq_max_speed">Max frequency:</string>   
     <string name="max_cpu_num">Max CPU number:</string>   
     <string name="enable_oc">Enable CPU 4x1.7Ghz:</string>   
-   
-   <!-- Lockscreen See Through -->
-   <string name="lockscreen_seethrough">Lockscreen See through</string>
-   <string name="lockscreen_seethrough_summary">Allows you to see your homescreen behind the lock screen including apps.</string> 
 </resources>
