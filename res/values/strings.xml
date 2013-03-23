@@ -247,6 +247,8 @@
     <string name="custom_density_dialog_summary">"Changing your LCD density can cause unexpected app behavior. If you encounter market app incompatibility please return here and restart the process from step 1."</string>
     <string name="custom_density_dialog_button_got">Got it!</string>
     <string name="custom_density_dialog_button_reboot">Reboot now</string>
+    <string name="lock_clock_title">cLock settings</string>
+    <string name="lock_clock_summary">View or change how the \'cLock\' Home and Lock screen widgets will display</string>
 
     <!-- Statusbar | Toggles -->
     <string name="toggle_style_title">Toggle style</string>
