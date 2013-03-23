@@ -94,6 +94,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements
     private Switch mLockAllWidgetsSwitch;
     private Switch mLockUnlimitedWidgetsSwitch;
     private Button mLockTextColorButton;
+    private Switch mLockHideStatusbarInfoSwitch;
 
     private TextView mLongPressText;
     private TextView mLockTextColorText;
@@ -106,6 +107,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements
     private TextView mLockCarouselText;
     private TextView mLockAllWidgetsText;
     private TextView mLockUnlimitedWidgetsText;
+    private TextView mLockHideStatusbarInfoText;
 
     private ShortcutPickerHelper mPicker;
     private String[] targetActivities = new String[8];
@@ -336,6 +338,19 @@ public class Lockscreens extends AOKPPreferenceFragment implements
                     }
                 });
 
+        mLockHideStatusbarInfoText = ((TextView) getActivity().findViewById(R.id.lockscreen_hide_statusbar_info_id));
+        mLockHideStatusbarInfoText.setOnClickListener(mLockHideStatusbarInfoTextListener);
+        mLockHideStatusbarInfoSwitch = (Switch) getActivity().findViewById(R.id.lockscreen_hide_statusbar_info_switch);
+        mLockHideStatusbarInfoSwitch
+                .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton v, boolean checked) {
+                        Settings.System.putBoolean(cr,
+                                Settings.System.NAVIGATION_BAR_STATUS_HIDE_LOCKSCREEN_INFO, checked);
+                        updateSwitches();
+                    }
+                });
+
         mLongPressText = ((TextView) getActivity()
                 .findViewById(R.id.lockscreen_target_longpress_id));
         mLongPressText.setOnClickListener(mLongPressTextListener);
@@ -442,6 +457,16 @@ public class Lockscreens extends AOKPPreferenceFragment implements
         }
     };
 
+    private TextView.OnClickListener mLockHideStatusbarInfoTextListener = new TextView.OnClickListener() {
+        public void onClick(View v) {
+            createMessage(
+                    getResources().getString(
+                            R.string.lockscreen_hide_statusbar_info_title),
+                    getResources().getString(
+                            R.string.lockscreen_hide_statusbar_info_summary));
+        }
+    };
+
     private void updateSwitches() {
         mLockBatterySwitch.setChecked(Settings.System.getBoolean(cr,
                 Settings.System.LOCKSCREEN_BATTERY, false));
@@ -461,6 +486,8 @@ public class Lockscreens extends AOKPPreferenceFragment implements
                 Settings.System.LOCKSCREEN_MINIMIZE_LOCKSCREEN_CHALLENGE, false));
         mLockCarouselSwitch.setChecked(Settings.System.getBoolean(cr,
                 Settings.System.LOCKSCREEN_USE_WIDGET_CONTAINER_CAROUSEL, false));
+        mLockHideStatusbarInfoSwitch.setChecked(Settings.System.getBoolean(cr,
+                Settings.System.NAVIGATION_BAR_STATUS_HIDE_LOCKSCREEN_INFO, false));
     }
 
     private void setDrawables() {
@@ -875,6 +902,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements
             mLockCarouselSwitch.setVisibility(View.VISIBLE);
             mLockAllWidgetsSwitch.setVisibility(View.VISIBLE);
             mLockUnlimitedWidgetsSwitch.setVisibility(View.VISIBLE);
+            mLockHideStatusbarInfoSwitch.setVisibility(View.VISIBLE);
             mLongPressText.setVisibility(View.VISIBLE);
             mLockBatteryText.setVisibility(View.VISIBLE);
             mLockRotateText.setVisibility(View.VISIBLE);
@@ -887,6 +915,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements
             mLockUnlimitedWidgetsText.setVisibility(View.VISIBLE);
             mLockTextColorText.setVisibility(View.VISIBLE);
             mLockTextColorButton.setVisibility(View.VISIBLE);
+            mLockHideStatusbarInfoText.setVisibility(View.VISIBLE);
             mHelperText.setText(getResources().getString(R.string.lockscreen_options_info));
         } else {
             mLongPressStatus.setVisibility(View.GONE);
@@ -899,6 +928,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements
             mLockCarouselSwitch.setVisibility(View.GONE);
             mLockAllWidgetsSwitch.setVisibility(View.GONE);
             mLockUnlimitedWidgetsSwitch.setVisibility(View.GONE);
+            mLockHideStatusbarInfoSwitch.setVisibility(View.GONE);
             mLongPressText.setVisibility(View.GONE);
             mLockBatteryText.setVisibility(View.GONE);
             mLockRotateText.setVisibility(View.GONE);
@@ -911,6 +941,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements
             mLockUnlimitedWidgetsText.setVisibility(View.GONE);
             mLockTextColorText.setVisibility(View.GONE);
             mLockTextColorButton.setVisibility(View.GONE);
+            mLockHideStatusbarInfoText.setVisibility(View.GONE);
             mHelperText.setText(getResources().getString(R.string.lockscreen_target_info));
         }
     }
