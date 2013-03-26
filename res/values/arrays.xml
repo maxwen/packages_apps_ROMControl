@@ -785,10 +785,12 @@
 	<string-array name="choose_toggle_side_entries" translatable="false">
         <item>@string/right</item>
         <item>@string/left</item>
+        <item>@string/no_toggles</item>
     </string-array>
     <string-array name="choose_toggle_side_values" translatable="false">
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string-array name="hardware_keys_action_entries" translatable="false">
