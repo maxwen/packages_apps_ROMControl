@@ -1066,8 +1066,4 @@ s will display</string>
    <!-- Lockscreen See Through -->
    <string name="lockscreen_seethrough">Lockscreen See through</string>
    <string name="lockscreen_seethrough_summary">Allows you to see your homescreen behind the lock screen including apps.</string> 
-
-    <!-- Camera lockscreen widget -->
-    <string name="camera_widget">Lockscreen Camera widget</string>
-    <string name="camera_widget_summary">Allows you to disable camera widget in losckscreen.</string>
 </resources>

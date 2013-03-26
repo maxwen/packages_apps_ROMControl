@@ -80,7 +80,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
     private static final String PREF_LOCKSCREEN_LONGPRESS_CHALLENGE = "lockscreen_longpress_challenge";
     private static final String PREF_LOCKSCREEN_HIDE_STATUSBAR_INFO = "lockscreen_hide_statusbar_info";
     private static final String KEY_SEE_TRHOUGH = "see_through";
-    private static final String PREF_LOCKSCREEN_CAMERA_WIDHET_SHOW = "camera_widget";
     
     public static final int REQUEST_PICK_WALLPAPER = 199;
     public static final int REQUEST_PICK_CUSTOM_ICON = 200;
@@ -104,8 +103,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
     CheckBoxPreference mLockscreenUseCarousel;
     CheckBoxPreference mLockscreenLongpressChallenge;
     CheckBoxPreference mLockscreenHideStatusbarInfo;
-    CheckBoxPreference mSeeThrough;
-    CheckBoxPreference mCameraWidget;
+    private CheckBoxPreference mSeeThrough;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -167,11 +165,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
 
         mSeeThrough = (CheckBoxPreference)findPreference(KEY_SEE_TRHOUGH);
         mSeeThrough.setChecked(Settings.System.getBoolean(mContentRes,
-                Settings.System.LOCKSCREEN_SEE_THROUGH, false));
-
-        mCameraWidget = (CheckBoxPreference)findPreference(PREF_LOCKSCREEN_CAMERA_WIDHET_SHOW);
-        mCameraWidget.setChecked(Settings.System.getBoolean(mContentRes,
-                Settings.System.CAMERA_WIDGET_HIDE, false)); 
+                Settings.System.LOCKSCREEN_SEE_THROUGH, false)); 
 
         if (isSW600DPScreen(mContext)) {
             ((PreferenceGroup)findPreference("layout")).removePreference((Preference)findPreference(PREF_LOCKSCREEN_MINIMIZE_CHALLENGE));
@@ -280,11 +274,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
             Settings.System.putInt(mContentRes,
                     Settings.System.LOCKSCREEN_SEE_THROUGH, 
                     ((CheckBoxPreference)preference).isChecked() ? 1 : 0);
-            return true;
-        } else if (preference == mCameraWidget) {
-            Settings.System.putBoolean(mContext.getContentResolver(),
-                    Settings.System.CAMERA_WIDGET_HIDE, 
-                    ((CheckBoxPreference) preference).isChecked());
             return true; 
         }
 
