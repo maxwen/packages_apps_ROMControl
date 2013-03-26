@@ -70,7 +70,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
 
     private static final String PREF_VOLUME_ROCKER_WAKE = "volume_rocker_wake";
     private static final String PREF_VOLUME_MUSIC = "volume_music_controls";
-    private static final String PREF_QUICK_UNLOCK = "lockscreen_quick_unlock_control";
     private static final String PREF_LOCKSCREEN_AUTO_ROTATE = "lockscreen_auto_rotate";
     private static final String PREF_LOCKSCREEN_ALL_WIDGETS = "lockscreen_all_widgets";
     private static final String PREF_LOCKSCREEN_UNLIMITED_WIDGETS = "lockscreen_unlimited_widgets";
@@ -96,7 +95,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
 
     CheckBoxPreference mVolumeMusic;
     CheckBoxPreference mVolumeRockerWake;
-    CheckBoxPreference mQuickUnlock;
     CheckBoxPreference mLockscreenBattery;
     CheckBoxPreference mLockscreenAllWidgets;
     CheckBoxPreference mLockscreenUnlimitedWidgets;
@@ -125,10 +123,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
         mVolumeMusic = (CheckBoxPreference) findPreference(PREF_VOLUME_MUSIC);
         mVolumeMusic.setChecked(Settings.System.getBoolean(mContentRes,
                 Settings.System.VOLUME_MUSIC_CONTROLS, false));
-
-        mQuickUnlock = (CheckBoxPreference) findPreference(PREF_QUICK_UNLOCK);
-        mQuickUnlock.setChecked(Settings.System.getBoolean(mContentRes,
-                Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, false));
 
         mLockscreenAutoRotate = (CheckBoxPreference)findPreference(PREF_LOCKSCREEN_AUTO_ROTATE);
         mLockscreenAutoRotate.setChecked(Settings.System.getBoolean(mContentRes,
@@ -221,11 +215,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements OnPreferenceC
         } else if (preference == mVolumeMusic) {
             Settings.System.putBoolean(mContentRes,
                     Settings.System.VOLUME_MUSIC_CONTROLS,
-                    ((CheckBoxPreference) preference).isChecked());
-            return true;
-        } else if (preference == mQuickUnlock) {
-            Settings.System.putBoolean(mContentRes,
-                    Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL,
                     ((CheckBoxPreference) preference).isChecked());
             return true;
         } else if (preference == mLockscreenAllWidgets) {

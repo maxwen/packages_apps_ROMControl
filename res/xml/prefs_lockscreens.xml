@@ -2,16 +2,6 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-     <PreferenceCategory
-            android:key="security"
-            android:title="@string/lockscreen_security_cat">
-
-        <CheckBoxPreference
-            android:key="lockscreen_quick_unlock_control"
-            android:title="@string/lockscreen_quick_unlock_control_title"
-            android:summary="@string/lockscreen_quick_unlock_control_summary" />
-
-    </PreferenceCategory>
     <PreferenceCategory
         android:key="layout"
         android:title="@string/lockscreen_layout_cat">
@@ -109,14 +99,7 @@
     <PreferenceCategory
             android:key="lock_widgets"
             android:title="@string/lock_widgets_short">
-            <PreferenceScreen
-                android:key="lock_clock"
-                android:title="@string/lock_clock_title"
-                android:summary="@string/lock_clock_summary">
-                <intent android:action="android.intent.action.MAIN"
-                    android:targetPackage="com.cyanogenmod.lockclock"
-                    android:targetClass="com.cyanogenmod.lockclock.preference.Preferences" />
-            </PreferenceScreen>
+
             <CheckBoxPreference
                 android:key="lockscreen_all_widgets"
                 android:title="@string/lockscreen_all_widgets_title"
