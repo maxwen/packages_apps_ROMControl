@@ -90,9 +90,9 @@
                 android:summary="@string/lockscreen_seethrough_summary" />
 
             <CheckBoxPreference
-                android:key="camera_widget_hide"
-                android:title="@string/camera_widget_hide"
-                android:summary="@string/camera_widget_hide_summary" /> 
+                android:key="camera_widget"
+                android:title="@string/camera_widget"
+                android:summary="@string/camera_widget_summary" /> 
 
     </PreferenceCategory>
 
