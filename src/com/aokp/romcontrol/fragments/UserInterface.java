@@ -105,12 +105,15 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     private static final CharSequence PREF_POWER_CRT_MODE = "system_power_crt_mode";
     private static final CharSequence PREF_POWER_CRT_SCREEN_OFF = "system_power_crt_screen_off";
     private static final String STATUSBAR_HIDDEN = "statusbar_hidden";
-
+    private static final CharSequence PREF_LOCKSCREEN_WALLPAPER = "lockscreen_wallpaper";
+    
     private static final int REQUEST_PICK_WALLPAPER = 201;
     //private static final int REQUEST_PICK_CUSTOM_ICON = 202; //unused
     private static final int REQUEST_PICK_BOOT_ANIMATION = 203;
-
+    private static final int REQUEST_PICK_LOCKSCREEN_WALLPAPER = 204;
+    
     private static final String WALLPAPER_NAME = "notification_wallpaper.jpg";
+    private static final String LOCKSCREEN_WALLPAPER_NAME = "lockscreen_wallpaper.jpg";
     private static final String BOOTANIMATION_USER_PATH = "/data/local/bootanimation.zip";
     private static final String BOOTANIMATION_SYSTEM_PATH = "/system/media/bootanimation.zip";
 
@@ -119,6 +122,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     CheckBoxPreference mDisableBootAnimation;
     CheckBoxPreference mStatusBarNotifCount;
     Preference mNotificationWallpaper;
+    Preference mLockscreenWallpaper;
     Preference mWallpaperAlpha;
     Preference mCustomLabel;
     CheckBoxPreference mShowWifiName;
@@ -274,6 +278,8 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             ((PreferenceGroup) findPreference(PREF_MISC)).removePreference(mWakeUpWhenPluggedOrUnplugged);
         }
 
+        mLockscreenWallpaper = findPreference(PREF_LOCKSCREEN_WALLPAPER);
+        
         setHasOptionsMenu(true);
         resetBootAnimation();
     }
@@ -534,7 +540,32 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             Settings.System.putBoolean(getActivity().getContentResolver(),
                     Settings.System.STATUSBAR_HIDDEN, checked ? true : false);
             return true;
-        }
+        } else if (preference == mLockscreenWallpaper) {
+            Display display = getActivity().getWindowManager().getDefaultDisplay();
+            int width = display.getWidth();
+            int height = display.getHeight();
+
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+
+            intent.setType("image/*");
+            intent.putExtra("crop", "true");
+            boolean isPortrait = getResources()
+                    .getConfiguration().orientation
+                    == Configuration.ORIENTATION_PORTRAIT;
+            intent.putExtra("aspectX", isPortrait ? width : height);
+            intent.putExtra("aspectY", isPortrait ? height : width);
+            intent.putExtra("outputX", width);
+            intent.putExtra("outputY", height);
+            intent.putExtra("scale", true);
+            intent.putExtra("scaleUpIfNeeded", true);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    getLockscreenExternalUri());
+            intent.putExtra("outputFormat",
+                    Bitmap.CompressFormat.PNG.toString());
+
+            startActivityForResult(intent, REQUEST_PICK_LOCKSCREEN_WALLPAPER);
+            return true;
+		}
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
@@ -556,7 +587,15 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                     }
                 }).start();
                 return true;
-            default:
+             case R.id.remove_lockscreen_wallpaper:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mContext.deleteFile(LOCKSCREEN_WALLPAPER_NAME);
+                    }
+                }).start();
+                return true;
+           default:
                 // call to super is implicit
                 return onContextItemSelected(item);
         }
@@ -568,6 +607,12 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         return Uri.fromFile(wallpaper);
     }
 
+    private Uri getLockscreenExternalUri() {
+        File dir = mContext.getExternalCacheDir();
+        File wallpaper = new File(dir, LOCKSCREEN_WALLPAPER_NAME);
+        return Uri.fromFile(wallpaper);
+    }
+    
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_PICK_WALLPAPER) {
@@ -599,6 +644,25 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                 }
                 mBootAnimationPath = data.getData().getPath();
                 openBootAnimationDialog();
+            } else if (requestCode == REQUEST_PICK_LOCKSCREEN_WALLPAPER) {
+                FileOutputStream wallpaperStream = null;
+                try {
+                    wallpaperStream = mContext.openFileOutput(LOCKSCREEN_WALLPAPER_NAME,
+                            Context.MODE_WORLD_READABLE);
+                	Uri selectedImageUri = getLockscreenExternalUri();
+                	Bitmap bitmap = BitmapFactory.decodeFile(selectedImageUri.getPath());
+
+                	bitmap.compress(Bitmap.CompressFormat.PNG, 100, wallpaperStream);
+                } catch (FileNotFoundException e) {
+                    return; // NOOOOO
+                } finally {
+                    try {
+                        if (wallpaperStream != null)
+                            wallpaperStream.close();
+                    } catch (IOException e) {
+                        // let it go
+                    }
+                }
             }
         }
     }

@@ -2,4 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/remove_wallpaper"
         android:title="@string/menu_user_interface_reset"/>
+    <item android:id="@+id/remove_lockscreen_wallpaper"
+          android:title="@string/menu_lockscreens_reset"/>
 </menu>
