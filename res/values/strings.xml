@@ -599,8 +599,6 @@ s will display</string>
     <string name="circles_lock_halo_alpha_title">Halo alpha</string>
     <string name="circles_lock_wave_color_title">Wave color</string>
     <string name="circles_lock_wave_alpha_title">Wave alpha</string>
-    <string name="lockscreen_hide_statusbar_info_title">Hide statusbar information</string>
-    <string name="lockscreen_hide_statusbar_info_summary">Hide statusbar clock and system information on lockscreen</string>
 
     <!-- Lockscreen Targets-->
     <string name="custom_targets">Custom lockscreen targets</string>
