@@ -2,13 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:prvandroid="http://schemas.android.com/apk/prv/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <LinearLayout
-        android:id="@+id/lockscreen_options"
+    android:layout_height="match_parent"
+    android:orientation="vertical">    
+    
+    <ScrollView
+        android:id="@+id/lockscreen_options_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/lock_target_container"
         android:orientation="vertical" >
+        
+        <LinearLayout
+	        android:id="@+id/lockscreen_options"
+            android:layout_width="match_parent"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+            android:orientation="vertical" >
 
         <TextView
             android:id="@+id/helper_text"
@@ -429,14 +438,21 @@
                 android:padding="4dip" />
         </RelativeLayout>
     </LinearLayout>
+    </ScrollView>
 
+        <RelativeLayout
+        	android:id="@+id/lock_target_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        	android:layout_alignParentBottom="true">
+    
     <com.android.internal.widget.multiwaveview.GlowPadView
         android:id="@+id/lock_target"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="-40dp"
+        android:layout_marginTop="-90dp"
         android:contentDescription="@*android:string/keyguard_accessibility_slide_area"
         android:gravity="bottom"
         android:orientation="horizontal"
@@ -455,5 +471,6 @@
         prvandroid:targetDescriptions="@*android:array/lockscreen_target_descriptions_unlock_only"
         prvandroid:targetDrawables="@*android:array/lockscreen_targets_unlock_only"
         prvandroid:vibrationDuration="20" />
-
+        </RelativeLayout>
+        
 </RelativeLayout>

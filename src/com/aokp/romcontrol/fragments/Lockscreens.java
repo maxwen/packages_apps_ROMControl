@@ -81,6 +81,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements
     private GlowPadView mGlowPadView;
     private TextView mHelperText;
     private View mLockscreenOptions;
+    private View mLockscreenOptionsScroll;
     private boolean mIsLandscape;
 
     private Switch mLongPressStatus;
@@ -197,7 +198,7 @@ public class Lockscreens extends AOKPPreferenceFragment implements
         mGlowPadView.setOnTriggerListener(this);
         mLockscreenOptions = ((View) getActivity().findViewById(R.id.lockscreen_options));
         if (mLockscreenOptions != null) {
-            mLockscreenOptions.getParent().bringChildToFront(mLockscreenOptions);
+        	mLockscreenOptionsScroll = ((View) getActivity().findViewById(R.id.lockscreen_options_scroll));
             mIsLandscape = false;
         } else {
             mIsLandscape = true;
@@ -833,16 +834,16 @@ public class Lockscreens extends AOKPPreferenceFragment implements
 
     @Override
     public void onGrabbed(View v, int handle) {
-        if (!mIsLandscape) {
+        /*if (!mIsLandscape) {
             updateVisiblity(false);
-        }
+        }*/
     }
 
     @Override
     public void onReleased(View v, int handle) {
-        if (!mIsLandscape) {
+        /*if (!mIsLandscape) {
             updateVisiblity(true);
-        }
+        }*/
     }
 
     @Override
@@ -940,6 +941,8 @@ public class Lockscreens extends AOKPPreferenceFragment implements
 
     private void updateVisiblity(boolean visible) {
         if (visible) {
+        	mLockscreenOptionsScroll.setVisibility(View.VISIBLE);
+        	mLockscreenOptions.setVisibility(View.VISIBLE);
             mLongPressStatus.setVisibility(View.VISIBLE);
             mLockBatterySwitch.setVisibility(View.VISIBLE);
             mLockRotateSwitch.setVisibility(View.VISIBLE);
@@ -970,6 +973,8 @@ public class Lockscreens extends AOKPPreferenceFragment implements
             mLockCameraWidgetHideText.setVisibility(View.VISIBLE);
             mHelperText.setText(getResources().getString(R.string.lockscreen_options_info));
         } else {
+        	mLockscreenOptionsScroll.setVisibility(View.GONE);
+           	mLockscreenOptions.setVisibility(View.GONE);
             mLongPressStatus.setVisibility(View.GONE);
             mLockBatterySwitch.setVisibility(View.GONE);
             mLockRotateSwitch.setVisibility(View.GONE);
