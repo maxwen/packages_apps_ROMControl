@@ -442,20 +442,24 @@
 
         <RelativeLayout
         	android:id="@+id/lock_target_container"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-        	android:layout_alignParentBottom="true">
+        	android:orientation="vertical"
+        	android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true">
     
     <com.android.internal.widget.multiwaveview.GlowPadView
         android:id="@+id/lock_target"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="-40dp"
-        android:layout_marginTop="-90dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="-20pt"
+        android:layout_marginTop="-20pt"
         android:contentDescription="@*android:string/keyguard_accessibility_slide_area"
-        android:gravity="bottom"
-        android:orientation="horizontal"
+		android:gravity="top"
+        android:orientation="vertical"
         prvandroid:allowScaling="true"
         prvandroid:directionDescriptions="@*android:array/lockscreen_direction_descriptions"
         prvandroid:feedbackCount="1"
