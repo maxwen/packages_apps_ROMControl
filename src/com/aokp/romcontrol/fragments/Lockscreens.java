@@ -539,12 +539,9 @@ public class Lockscreens extends AOKPPreferenceFragment implements
                 Settings.System.CAMERA_WIDGET_HIDE, false));
     }
 
+
     private void setDrawables() {
         mLongPressStatus.setChecked(mBoolLongPress);
-
-        if (mUnlockCounter() < 1) {
-            targetActivities[0] = AwesomeConstant.ACTION_UNLOCK.value();
-        }
 
         // Custom Targets
         ArrayList<TargetDrawable> storedDraw = new ArrayList<TargetDrawable>();
@@ -746,6 +743,10 @@ public class Lockscreens extends AOKPPreferenceFragment implements
         }
         mBoolLongPress = (Settings.System.getBoolean(cr,
                 Settings.System.LOCKSCREEN_TARGETS_LONGPRESS, false));
+
+        if (mUnlockCounter() < 1) {
+            targetActivities[0] = AwesomeConstant.ACTION_UNLOCK.value();
+        }
         setDrawables();
     }
 
