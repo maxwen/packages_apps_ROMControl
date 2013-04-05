@@ -53,7 +53,6 @@ public class BootService extends Service {
         @Override
         protected Void doInBackground(Void... args) {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(c);
-            final CMDProcessor cmd = new CMDProcessor();
 
             if (HeadphoneService.getUserHeadphoneAudioMode(c) != -1
                     || HeadphoneService.getUserBTAudioMode(c) != -1) {

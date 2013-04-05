@@ -150,8 +150,7 @@ public class CPUSettings extends AOKPPreferenceFragment implements SeekBar.OnSee
                 editor.putBoolean(ENABLE_OC, checked);
                 editor.commit();
                 
-                CMDProcessor cmd = new CMDProcessor();
-        		cmd.su.runWaitFor("busybox echo " + (checked?"1":"0") + " > " + TEGRA_ENABLE_OC);
+        		CMDProcessor.runSuCommand("busybox echo " + (checked?"1":"0") + " > " + TEGRA_ENABLE_OC);
             }
         });
 		
@@ -189,11 +188,9 @@ public class CPUSettings extends AOKPPreferenceFragment implements SeekBar.OnSee
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        // we have a break now, write the values..
-        CMDProcessor cmd = new CMDProcessor();
-        
-        cmd.su.runWaitFor("busybox echo " + mFreqMaxSetting + " > " + TEGRA_MAX_FREQ);
-        cmd.su.runWaitFor("busybox echo " + mCPUMaxSetting + " > " + TEGRA_MAX_CPU);
+        // we have a break now, write the values..        
+        CMDProcessor.runSuCommand("busybox echo " + mFreqMaxSetting + " > " + TEGRA_MAX_FREQ);
+        CMDProcessor.runSuCommand("busybox echo " + mCPUMaxSetting + " > " + TEGRA_MAX_CPU);
     }
 
     @Override
