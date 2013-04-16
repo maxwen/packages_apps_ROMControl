@@ -109,7 +109,8 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     private static final CharSequence PREF_STATUSBAR_AUTO_EXPAND_HIDDEN = "statusbar_auto_expand_hidden";
     private static final CharSequence PREF_STATUSBAR_SWIPE_FOR_FULLSCREEN = "statusbar_swipe_for_fullscreen";
     private static final CharSequence PREF_STATUSBAR_SWIPE_TIMEOUT = "statusbar_swipe_timeout";
-    
+    private static final CharSequence PREF_KEY_CLASSIC_RECENTS = "classic_recents";
+        
     private static final int REQUEST_PICK_WALLPAPER = 201;
     //private static final int REQUEST_PICK_CUSTOM_ICON = 202; //unused
     private static final int REQUEST_PICK_BOOT_ANIMATION = 203;
@@ -149,7 +150,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     CheckBoxPreference mStatusBarAutoExpandHidden;
     CheckBoxPreference mStatusBarSwipeForFullscreen;
     ListPreference mStatusBarSwipeTimeout;
-    
+    private CheckBoxPreference mClassicRecents;    
     private AnimationDrawable mAnimationPart1;
     private AnimationDrawable mAnimationPart2;
     private String mErrormsg;
@@ -289,6 +290,12 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         mWakeUpWhenPluggedOrUnplugged = (CheckBoxPreference) findPreference(PREF_WAKEUP_WHEN_PLUGGED_UNPLUGGED);
         mWakeUpWhenPluggedOrUnplugged.setChecked(Settings.System.getBoolean(mContentResolver,
                         Settings.System.WAKEUP_WHEN_PLUGGED_UNPLUGGED, true));
+
+        mClassicRecents = (CheckBoxPreference) findPreference(PREF_KEY_CLASSIC_RECENTS);
+        boolean classicRecents = Settings.System.getBoolean(mContentResolver,
+                Settings.System.CLASSIC_RECENTS_MENU, false);
+        mClassicRecents.setChecked(classicRecents);
+        mClassicRecents.setOnPreferenceChangeListener(this); 
 
         // hide option if device is already set to never wake up
         if(!mContext.getResources().getBoolean(
@@ -1084,6 +1091,11 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                     Settings.System.STATUSBAR_SWIPE_TIMEOUT, timeout);
             mStatusBarSwipeTimeout.setSummary(mStatusBarSwipeTimeout.getEntries()[array]);
             return true;
+        } else if (preference == mClassicRecents) {
+            Settings.System.putBoolean(getActivity().getContentResolver(),
+                    Settings.System.CLASSIC_RECENTS_MENU,
+                    (Boolean) newValue ? true : false);
+            mClassicRecents.setChecked((Boolean)newValue); 
         }
         return false;
     }

@@ -1127,4 +1127,8 @@ s will display</string>
     <string name="freq_max_speed">Max frequency:</string>   
     <string name="max_cpu_num">Max CPU number:</string>   
     <string name="enable_oc">Enable CPU 4x1.7Ghz:</string>   
+
+    <!-- Classic Recent Menu -->
+    <string name="show_classic_recents">Classic Recents</string>
+    <string name="show_classic_recents_summary">Show Gingerbread styled recents menu</string> 
 </resources>
