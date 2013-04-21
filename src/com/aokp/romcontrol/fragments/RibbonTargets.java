@@ -561,7 +561,7 @@ public class RibbonTargets extends AOKPPreferenceFragment implements
     public void resetRibbon() {
         Settings.System.putString(mContentRes, Settings.System.RIBBON_TARGETS_SHORT[arrayNum], "");
         Settings.System.putString(mContentRes, Settings.System.RIBBON_TARGETS_LONG[arrayNum], "");
-        Settings.System.putString(mContentRes, Settings.System.RIBBON_TARGETS_ICONS[arrayNum], "**null**");
+        Settings.System.putString(mContentRes, Settings.System.RIBBON_TARGETS_ICONS[arrayNum], "");
         Settings.System.putBoolean(mContentRes, Settings.System.ENABLE_RIBBON_TEXT[arrayNum], true);
         Settings.System.putInt(mContentRes, Settings.System.RIBBON_ICON_SIZE[arrayNum], 0);
         Settings.System.putInt(mContentRes, Settings.System.RIBBON_TEXT_COLOR[arrayNum], -1);
@@ -575,12 +575,7 @@ public class RibbonTargets extends AOKPPreferenceFragment implements
         mShortTargets = Settings.System.getArrayList(mContentRes, Settings.System.RIBBON_TARGETS_SHORT[arrayNum]);
         mLongTargets = Settings.System.getArrayList(mContentRes, Settings.System.RIBBON_TARGETS_LONG[arrayNum]);
         mCustomIcons = Settings.System.getArrayList(mContentRes, Settings.System.RIBBON_TARGETS_ICONS[arrayNum]);
-        if (mShortTargets.size() < 1) {
-            mShortTargets.add("**null**");
-            mLongTargets.add("**null**");
-            mCustomIcons.add("**null**");
-        }
-
+        
         textColor = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.RIBBON_TEXT_COLOR[arrayNum], Color.WHITE);
         mTextColor.setBackgroundColor(textColor);
