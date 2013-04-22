@@ -588,26 +588,31 @@ public class RibbonTargets extends AOKPPreferenceFragment implements
         targetsLayout.setGravity(Gravity.CENTER_HORIZONTAL);
         targetScrollView.setHorizontalFadingEdgeEnabled(true);
         int length = mShortTargets.size();
-        for (int i = 0; i < length; i++) {
-            if (mCustomIcons.size() > 0) {
-                if (!mCustomIcons.get(i).equals("**null**")) {
-                    targetsLayout.addView(getCustomIcon(mCustomIcons.get(i)), PARAMS_TOGGLE_SCROLL);
-                } else {
-                    Drawable mIcon = NavBarHelpers.getIconImage(mContext, mShortTargets.get(i));
-                    int desiredSize = (int) (48 * metrics.density);
-                    int width = mIcon.getIntrinsicWidth();
-                    if (width > desiredSize) {
-                        Bitmap bm = ((BitmapDrawable) mIcon).getBitmap();
-                        if (bm != null) {
-                            Bitmap bitmapOrig = Bitmap.createScaledBitmap(bm, desiredSize, desiredSize, false);
-                            mIcon = new BitmapDrawable(mContext.getResources(), bitmapOrig);
-                        }
-                    }
-
-                    targetsLayout.addView(getImageButton(mIcon), PARAMS_TOGGLE_SCROLL);
+        if (length > 0 && (mShortTargets.size() == mCustomIcons.size())) {
+            for (int i = 0; i < length; i++) {
+                if (TextUtils.isEmpty(mShortTargets.get(i))) {
+                    continue;
                 }
-            } else {
-                targetsLayout.addView(getImageButton(mShortTargets.get(i)), PARAMS_TOGGLE_SCROLL);
+                if (mCustomIcons.size() > 0) {
+                    if (!mCustomIcons.get(i).equals("**null**")) {
+                        targetsLayout.addView(getCustomIcon(mCustomIcons.get(i)), PARAMS_TOGGLE_SCROLL);
+                    } else {
+                        Drawable mIcon = NavBarHelpers.getIconImage(mContext, mShortTargets.get(i));
+                        int desiredSize = (int) (48 * metrics.density);
+                        int width = mIcon.getIntrinsicWidth();
+                        if (width > desiredSize) {
+                            Bitmap bm = ((BitmapDrawable) mIcon).getBitmap();
+                            if (bm != null) {
+                                Bitmap bitmapOrig = Bitmap.createScaledBitmap(bm, desiredSize, desiredSize, false);
+                                mIcon = new BitmapDrawable(mContext.getResources(), bitmapOrig);
+                            }
+                        }
+
+                        targetsLayout.addView(getImageButton(mIcon), PARAMS_TOGGLE_SCROLL);
+                    }
+                } else {
+                    targetsLayout.addView(getImageButton(mShortTargets.get(i)), PARAMS_TOGGLE_SCROLL);
+                }
             }
         }
         targetScrollView.addView(targetsLayout, PARAMS_TOGGLE);
