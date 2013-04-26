@@ -67,6 +67,16 @@
             android:summary="@string/statusbar_hide_summary" />
 
         <CheckBoxPreference
+            android:key="statusbar_auto_expand_hidden"
+            android:title="@string/statusbar_auto_expand_hidden_title"
+            android:summary="@string/statusbar_auto_expand_hidden_summary" />
+
+        <CheckBoxPreference
+            android:key="statusbar_swipe_for_fullscreen"
+            android:title="@string/statusbar_swipe_for_fullscreen_title"
+            android:summary="@string/statusbar_swipe_for_fullscreen_summary" />
+
+        <CheckBoxPreference
             android:key="ime_switcher"
             android:title="@string/ime_switcher_title"
             android:summary="@string/ime_switcher_summary"

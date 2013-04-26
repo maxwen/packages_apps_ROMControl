@@ -106,7 +106,9 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     private static final CharSequence PREF_POWER_CRT_SCREEN_OFF = "system_power_crt_screen_off";
     private static final CharSequence PREF_LOCKSCREEN_WALLPAPER = "lockscreen_wallpaper";
     private static final CharSequence PREF_STATUSBAR_HIDDEN = "statusbar_hidden";
-
+    private static final CharSequence PREF_STATUSBAR_AUTO_EXPAND_HIDDEN = "statusbar_auto_expand_hidden";
+    private static final CharSequence PREF_STATUSBAR_SWIPE_FOR_FULLSCREEN = "statusbar_swipe_for_fullscreen";
+    
     private static final int REQUEST_PICK_WALLPAPER = 201;
     //private static final int REQUEST_PICK_CUSTOM_ICON = 202; //unused
     private static final int REQUEST_PICK_BOOT_ANIMATION = 203;
@@ -143,7 +145,9 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     ListPreference mCrtMode;
     CheckBoxPreference mCrtOff;
     CheckBoxPreference mStatusBarHide;
-
+    CheckBoxPreference mStatusBarAutoExpandHidden;
+    CheckBoxPreference mStatusBarSwipeForFullscreen;
+    
     private AnimationDrawable mAnimationPart1;
     private AnimationDrawable mAnimationPart2;
     private String mErrormsg;
@@ -236,10 +240,27 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         mShowActionOverflow.setChecked(Settings.System.getBoolean(mContentResolver,
                         Settings.System.UI_FORCE_OVERFLOW_BUTTON, false));
 
+        boolean statusBarHidden = Settings.System.getBoolean(mContentResolver,
+                Settings.System.STATUSBAR_HIDDEN, false);
+                
         mStatusBarHide = (CheckBoxPreference) findPreference(PREF_STATUSBAR_HIDDEN);
-        mStatusBarHide.setChecked(Settings.System.getBoolean(mContentResolver,
-                Settings.System.STATUSBAR_HIDDEN, false));
+        mStatusBarHide.setChecked(statusBarHidden);
 
+        mStatusBarAutoExpandHidden = (CheckBoxPreference) findPreference(PREF_STATUSBAR_AUTO_EXPAND_HIDDEN);
+        
+        if (statusBarHidden){
+            mStatusBarAutoExpandHidden.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.STATUSBAR_AUTO_EXPAND_HIDDEN, false));
+        } else {
+            mStatusBarAutoExpandHidden.setChecked(false);
+        }
+        
+        mStatusBarAutoExpandHidden.setEnabled(statusBarHidden);
+        
+        mStatusBarSwipeForFullscreen = (CheckBoxPreference) findPreference(PREF_STATUSBAR_SWIPE_FOR_FULLSCREEN);
+        mStatusBarSwipeForFullscreen.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.STATUSBAR_SWIPE_FOR_FULLSCREEN, false));
+        
         mUserModeUI = (ListPreference) findPreference(PREF_USER_MODE_UI);
         int uiMode = Settings.System.getInt(mContentResolver,
                 Settings.System.CURRENT_UI_MODE, 0);
@@ -277,6 +298,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         if (isTablet(mContext)) {
             mStatusbarSliderPreference.setEnabled(false);
             mStatusBarHide.setEnabled(false);
+            mStatusBarAutoExpandHidden.setEnabled(false);
         } else {
             mHideExtras.setEnabled(false);
         }
@@ -537,7 +559,26 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         } else if (preference == mStatusBarHide) {
             boolean checked = ((CheckBoxPreference)preference).isChecked();
             Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.STATUSBAR_HIDDEN, checked ? true : false);
+                    Settings.System.STATUSBAR_HIDDEN, checked);
+            Settings.System.putBoolean(getActivity().getContentResolver(),
+                    Settings.System.STATUSBAR_HIDDEN_NOW, checked);
+            
+            if (!checked){
+                Settings.System.putBoolean(getActivity().getContentResolver(),
+                    Settings.System.STATUSBAR_AUTO_EXPAND_HIDDEN, false);
+                mStatusBarAutoExpandHidden.setChecked(false);
+            }
+            mStatusBarAutoExpandHidden.setEnabled(checked);
+            return true;
+        } else if (preference == mStatusBarAutoExpandHidden) {
+            boolean checked = ((CheckBoxPreference)preference).isChecked();
+            Settings.System.putBoolean(getActivity().getContentResolver(),
+                    Settings.System.STATUSBAR_AUTO_EXPAND_HIDDEN, checked);
+            return true;
+        } else if (preference == mStatusBarSwipeForFullscreen) {
+            boolean checked = ((CheckBoxPreference)preference).isChecked();
+            Settings.System.putBoolean(getActivity().getContentResolver(),
+                    Settings.System.STATUSBAR_SWIPE_FOR_FULLSCREEN, checked);
             return true;
         } else if (preference == mLockscreenWallpaper) {
             Display display = getActivity().getWindowManager().getDefaultDisplay();
@@ -1014,6 +1055,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                     Settings.System.USER_UI_MODE, val);
             mStatusbarSliderPreference.setEnabled(val == 1 ? false : true);
             mStatusBarHide.setEnabled(val == 1 ? false : true);
+            mStatusBarAutoExpandHidden.setEnabled(val == 1 ? false : true);
             mHideExtras.setEnabled(val == 1 ? true : false);
             Helpers.restartSystemUI();
             return true;

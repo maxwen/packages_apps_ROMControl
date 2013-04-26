@@ -510,6 +510,11 @@
     <string name="navigation_bar_menu_arrow_keys_summary">Checking this enables arrow keys in the Navigation Bar while typing</string>
     <string name="statusbar_hide_title">Hide Statusbar</string>
     <string name="statusbar_hide_summary">Checking this completely hides the Statusbar</string>
+    <string name="statusbar_auto_expand_hidden_title">Auto-Expand Statusbar</string>
+    <string name="statusbar_auto_expand_hidden_summary">Checking this shows hidden statusbar on active notifications</string>
+    <string name="statusbar_swipe_for_fullscreen_title">Statusbar swipe for fullscreen</string>
+    <string name="statusbar_swipe_for_fullscreen_summary">Checking this allows swiping down the statusbar for fullscreen apps</string>
+
     <string name="navigation_bar_alpha_title">Statusbar and Navigation Bar opacity</string>
     <string name="navbar_hide_enable_title">Hidden NavBar Enable</string>
     <string name="drag_handle_opacity_title">Drag Handle Opacity</string>
@@ -703,8 +708,6 @@ s will display</string>
     <string name="circles_lock_halo_alpha_title">Halo alpha</string>
     <string name="circles_lock_wave_color_title">Wave color</string>
     <string name="circles_lock_wave_alpha_title">Wave alpha</string>
-    <string name="lockscreen_hide_statusbar_info_title">Hide statusbar information</string>
-    <string name="lockscreen_hide_statusbar_info_summary">Hide statusbar clock and system information on lockscreen</string>
 
     <!-- Lockscreen See Through -->
     <string name="lockscreen_seethrough_title">Lockscreen See through</string>

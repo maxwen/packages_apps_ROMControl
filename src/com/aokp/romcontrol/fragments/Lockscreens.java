@@ -95,7 +95,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements
     private Switch mLockAllWidgetsSwitch;
     private Switch mLockUnlimitedWidgetsSwitch;
     private Button mLockTextColorButton;
-    private Switch mLockHideStatusbarInfoSwitch;
     private Switch mLockSeeThroughSwitch;
     private Switch mLockCameraWidgetHideSwitch;
 
@@ -110,7 +109,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements
     private TextView mLockCarouselText;
     private TextView mLockAllWidgetsText;
     private TextView mLockUnlimitedWidgetsText;
-    private TextView mLockHideStatusbarInfoText;
     private TextView mLockSeeThroughText;
     private TextView mLockCameraWidgetHideText;
 
@@ -350,19 +348,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements
                     }
                 });
 
-        mLockHideStatusbarInfoText = ((TextView) getActivity().findViewById(R.id.lockscreen_hide_statusbar_info_id));
-        mLockHideStatusbarInfoText.setOnClickListener(mLockHideStatusbarInfoTextListener);
-        mLockHideStatusbarInfoSwitch = (Switch) getActivity().findViewById(R.id.lockscreen_hide_statusbar_info_switch);
-        mLockHideStatusbarInfoSwitch
-                .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton v, boolean checked) {
-                        Settings.System.putBoolean(cr,
-                                Settings.System.NAVIGATION_BAR_STATUS_HIDE_LOCKSCREEN_INFO, checked);
-                        updateSwitches();
-                    }
-                });
-
         mLockSeeThroughText = ((TextView) getActivity().findViewById(R.id.lockscreen_seethrough_id));
         mLockSeeThroughText.setOnClickListener(mLockSeeThroughTextListener);
         mLockSeeThroughSwitch = (Switch) getActivity().findViewById(R.id.lockscreen_seethrough_switch);
@@ -495,14 +480,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements
         }
     };
 
-    private TextView.OnClickListener mLockHideStatusbarInfoTextListener = new TextView.OnClickListener() {
-        public void onClick(View v) {
-            createMessage(
-                    getResources().getString(R.string.lockscreen_hide_statusbar_info_title),
-                    getResources().getString(R.string.lockscreen_hide_statusbar_info_summary));
-        }
-    };
-
     private TextView.OnClickListener mLockSeeThroughTextListener = new TextView.OnClickListener() {
         public void onClick(View v) {
             createMessage(
@@ -538,8 +515,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements
                 Settings.System.LOCKSCREEN_MINIMIZE_LOCKSCREEN_CHALLENGE, false));
         mLockCarouselSwitch.setChecked(Settings.System.getBoolean(cr,
                 Settings.System.LOCKSCREEN_USE_WIDGET_CONTAINER_CAROUSEL, false));
-        mLockHideStatusbarInfoSwitch.setChecked(Settings.System.getBoolean(cr,
-                Settings.System.NAVIGATION_BAR_STATUS_HIDE_LOCKSCREEN_INFO, false));
         mLockSeeThroughSwitch.setChecked(Settings.System.getBoolean(cr,
                 Settings.System.LOCKSCREEN_SEE_THROUGH, false));
         mLockCameraWidgetHideSwitch.setChecked(Settings.System.getBoolean(cr,
@@ -961,7 +936,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements
             mLockCarouselSwitch.setVisibility(View.VISIBLE);
             mLockAllWidgetsSwitch.setVisibility(View.VISIBLE);
             mLockUnlimitedWidgetsSwitch.setVisibility(View.VISIBLE);
-            mLockHideStatusbarInfoSwitch.setVisibility(View.VISIBLE);
             mLockSeeThroughSwitch.setVisibility(View.VISIBLE);
             mLockCameraWidgetHideSwitch.setVisibility(View.VISIBLE);
             mLongPressText.setVisibility(View.VISIBLE);
@@ -976,7 +950,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements
             mLockUnlimitedWidgetsText.setVisibility(View.VISIBLE);
             mLockTextColorText.setVisibility(View.VISIBLE);
             mLockTextColorButton.setVisibility(View.VISIBLE);
-            mLockHideStatusbarInfoText.setVisibility(View.VISIBLE);
             mLockSeeThroughText.setVisibility(View.VISIBLE);
             mLockCameraWidgetHideText.setVisibility(View.VISIBLE);
             mHelperText.setText(getResources().getString(R.string.lockscreen_options_info));
@@ -993,7 +966,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements
             mLockCarouselSwitch.setVisibility(View.GONE);
             mLockAllWidgetsSwitch.setVisibility(View.GONE);
             mLockUnlimitedWidgetsSwitch.setVisibility(View.GONE);
-            mLockHideStatusbarInfoSwitch.setVisibility(View.GONE);
             mLockSeeThroughSwitch.setVisibility(View.GONE);
             mLockCameraWidgetHideSwitch.setVisibility(View.GONE);
             mLongPressText.setVisibility(View.GONE);
@@ -1008,7 +980,6 @@ public class Lockscreens extends AOKPPreferenceFragment implements
             mLockUnlimitedWidgetsText.setVisibility(View.GONE);
             mLockTextColorText.setVisibility(View.GONE);
             mLockTextColorButton.setVisibility(View.GONE);
-            mLockHideStatusbarInfoText.setVisibility(View.GONE);
             mLockSeeThroughText.setVisibility(View.GONE);
             mLockCameraWidgetHideText.setVisibility(View.GONE);
             mHelperText.setText(getResources().getString(R.string.lockscreen_target_info));
