@@ -239,23 +239,14 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         mShowActionOverflow = (CheckBoxPreference) findPreference(PREF_SHOW_OVERFLOW);
         mShowActionOverflow.setChecked(Settings.System.getBoolean(mContentResolver,
                         Settings.System.UI_FORCE_OVERFLOW_BUTTON, false));
-
-        boolean statusBarHidden = Settings.System.getBoolean(mContentResolver,
-                Settings.System.STATUSBAR_HIDDEN, false);
                 
         mStatusBarHide = (CheckBoxPreference) findPreference(PREF_STATUSBAR_HIDDEN);
-        mStatusBarHide.setChecked(statusBarHidden);
+        mStatusBarHide.setChecked(Settings.System.getBoolean(mContentResolver,
+                Settings.System.STATUSBAR_HIDDEN_NOW, false));
 
         mStatusBarAutoExpandHidden = (CheckBoxPreference) findPreference(PREF_STATUSBAR_AUTO_EXPAND_HIDDEN);
-        
-        if (statusBarHidden){
-            mStatusBarAutoExpandHidden.setChecked(Settings.System.getBoolean(mContentResolver,
+        mStatusBarAutoExpandHidden.setChecked(Settings.System.getBoolean(mContentResolver,
                 Settings.System.STATUSBAR_AUTO_EXPAND_HIDDEN, false));
-        } else {
-            mStatusBarAutoExpandHidden.setChecked(false);
-        }
-        
-        mStatusBarAutoExpandHidden.setEnabled(statusBarHidden);
         
         mStatusBarSwipeForFullscreen = (CheckBoxPreference) findPreference(PREF_STATUSBAR_SWIPE_FOR_FULLSCREEN);
         mStatusBarSwipeForFullscreen.setChecked(Settings.System.getBoolean(mContentResolver,
@@ -559,16 +550,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         } else if (preference == mStatusBarHide) {
             boolean checked = ((CheckBoxPreference)preference).isChecked();
             Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.STATUSBAR_HIDDEN, checked);
-            Settings.System.putBoolean(getActivity().getContentResolver(),
                     Settings.System.STATUSBAR_HIDDEN_NOW, checked);
-            
-            if (!checked){
-                Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.STATUSBAR_AUTO_EXPAND_HIDDEN, false);
-                mStatusBarAutoExpandHidden.setChecked(false);
-            }
-            mStatusBarAutoExpandHidden.setEnabled(checked);
             return true;
         } else if (preference == mStatusBarAutoExpandHidden) {
             boolean checked = ((CheckBoxPreference)preference).isChecked();
@@ -1054,9 +1036,28 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             Settings.System.putInt(mContentResolver,
                     Settings.System.USER_UI_MODE, val);
             mStatusbarSliderPreference.setEnabled(val == 1 ? false : true);
+            
             mStatusBarHide.setEnabled(val == 1 ? false : true);
+            if (val == 1){
+                mStatusBarHide.setChecked(false);
+                Settings.System.putBoolean(getActivity().getContentResolver(),
+                    Settings.System.STATUSBAR_HIDDEN_NOW, false);
+            }    
+ 
             mStatusBarAutoExpandHidden.setEnabled(val == 1 ? false : true);
+            if (val == 1){
+                mStatusBarAutoExpandHidden.setChecked(false);
+                Settings.System.putBoolean(getActivity().getContentResolver(),
+                    Settings.System.STATUSBAR_AUTO_EXPAND_HIDDEN, false);
+            }   
+             
             mHideExtras.setEnabled(val == 1 ? true : false);
+            if (val != 1){
+                mHideExtras.setChecked(false);
+                Settings.System.putBoolean(mContentResolver,
+                    Settings.System.HIDE_EXTRAS_SYSTEM_BAR, false);
+            }
+
             Helpers.restartSystemUI();
             return true;
         } else if (preference == mCrtMode) {
