@@ -511,8 +511,8 @@
     <string name="statusbar_hide_summary">Checking this completely hides the Statusbar</string>
     <string name="statusbar_auto_expand_hidden_title">Auto-Show Statusbar</string>
     <string name="statusbar_auto_expand_hidden_summary">Checking this shows hidden statusbar on active notifications except for fullscreen apps</string>
-    <string name="statusbar_swipe_for_fullscreen_title">Statusbar swipe down</string>
-    <string name="statusbar_swipe_for_fullscreen_summary">Checking this allows swiping down the statusbar for fullscreen apps or if hidden</string>
+    <string name="statusbar_swipe_enable_title">Statusbar swipe down</string>
+    <string name="statusbar_swipe_enable_summary">Checking this allows swiping down the statusbar for fullscreen apps or if hidden</string>
     <string name="statusbar_swipe_timeout_title">Statusbar timeout</string>
     <string name="statusbar_swipe_timeout_summary">Timeout for showing the statusbar</string> 
 
