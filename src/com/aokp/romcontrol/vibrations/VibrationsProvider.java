@@ -43,7 +43,7 @@ public class VibrationsProvider extends ContentProvider
     private static final String CQDVibrationName = "'CQD'";
     private static final String CQDVibrationPattern = "'500,400,400,150,150,400,400,150,150,400,400,400,400,150,150,400,400,400,400,150,150,150'";
     private static final String defaultVibrationName = "'Default'";
-    private static final String defaultVibrationPattern = "'500,1000,1000,1000,1000'";
+    private static final String defaultVibrationPattern = "'0,250,250,250'";
     // ---because pretty women are tasty treats---
     private static final String NOMVibrationName = "'NOM'";
     private static final String NOMVibrationPattern = "'500,400,400,150,150,400,400,400,400,400,400,400,400,400'";
@@ -54,7 +54,7 @@ public class VibrationsProvider extends ContentProvider
     private SQLiteDatabase vibrationsDB;
     private static final String DATABASE_NAME = "Vibrations";
     private static final String DATABASE_TABLE = "names";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_CREATE =
             "create table " + DATABASE_TABLE +
                     " (_id integer primary key autoincrement, "
@@ -101,13 +101,10 @@ public class VibrationsProvider extends ContentProvider
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion,
                 int newVersion) {
-            // db.execSQL("DROP TABLE IF EXISTS names");
-            // onCreate(db);
-            if (oldVersion == 1) {
-                db.execSQL(DATABASE_INIT_AOKP);
-                db.execSQL(DATABASE_INIT_CQD);
-                db.execSQL(DATABASE_INIT_NOM);
-                oldVersion++;
+            //maxwen: always delete old version
+            if (oldVersion != DATABASE_VERSION) {
+                db.execSQL("DROP TABLE IF EXISTS names");
+                onCreate(db);
             }
         }
     }
