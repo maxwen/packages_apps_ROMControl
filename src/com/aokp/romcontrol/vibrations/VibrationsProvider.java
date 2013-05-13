@@ -54,7 +54,7 @@ public class VibrationsProvider extends ContentProvider
     private SQLiteDatabase vibrationsDB;
     private static final String DATABASE_NAME = "Vibrations";
     private static final String DATABASE_TABLE = "names";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_CREATE =
             "create table " + DATABASE_TABLE +
                     " (_id integer primary key autoincrement, "
