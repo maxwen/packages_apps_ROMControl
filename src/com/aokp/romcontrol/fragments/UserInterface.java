@@ -568,6 +568,9 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             boolean checked = ((CheckBoxPreference)preference).isChecked();
             Settings.System.putBoolean(getActivity().getContentResolver(),
                     Settings.System.STATUSBAR_HIDDEN_NOW, checked);
+            // always reset if global config changes
+            Settings.System.putBoolean(getActivity().getContentResolver(),
+                    Settings.System.STATUSBAR_SHOW_HIDDEN_WITH_SWIPE, false);
             return true;
         } else if (preference == mStatusBarAutoExpandHidden) {
             boolean checked = ((CheckBoxPreference)preference).isChecked();
