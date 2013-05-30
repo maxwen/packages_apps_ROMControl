@@ -312,7 +312,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         mFontsize.setValue(Integer.toString(Settings.System.getInt(mContentRes,
                 Settings.System.STATUSBAR_FONT_SIZE, STOCK_FONT_SIZE)));
 
-        if (isTablet(mContext)) {
+        if (isTabletUI(mContext)) {
             mStatusbarSliderPreference.setEnabled(false);
             mStatusBarHide.setEnabled(false);
             mStatusBarAutoExpandHidden.setEnabled(false);
