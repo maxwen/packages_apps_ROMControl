@@ -87,6 +87,9 @@ public class Lockscreens extends AOKPPreferenceFragment implements
 
     private static final String WALLPAPER_NAME = "lockscreen_wallpaper.jpg";
 
+    private static final String INTENT_LOCKSCREEN_WALLPAPER_CHANGED =
+            "com.aokp.romcontrol.lockscreen_wallpaper_changed";
+
     private Context mContext;
     private Resources mResources;
 
@@ -781,12 +784,18 @@ public class Lockscreens extends AOKPPreferenceFragment implements
                 }
                 Uri selectedImageUri = getLockscreenExternalUri();
                 Bitmap bitmap = BitmapFactory.decodeFile(selectedImageUri.getPath());
-                if (bitmap != null){
+                if(bitmap!=null){
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, wallpaperStream);
+
+                    // Send Intent so that the ImageWallpaper knows there is a new bitmap to load
+                    Intent mIntent = new Intent();
+                    mIntent.setAction(INTENT_LOCKSCREEN_WALLPAPER_CHANGED);
+                    mContext.sendBroadcastAsUser(mIntent, UserHandle.ALL);
+
                     /*Some "wallpaper exists" image (full color?)*/
                     mWallpaperButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_wallpaper_exists));
+                    buildWallpaperAlert();
                 }
-                buildWallpaperAlert();
             }  else if ((requestCode == REQUEST_PICK_CUSTOM_ICON)
                     || (requestCode == REQUEST_PICK_LANDSCAPE_ICON)) {
 
@@ -971,6 +980,12 @@ public class Lockscreens extends AOKPPreferenceFragment implements
 
     private void removeWallpaper() {
         mContext.deleteFile(WALLPAPER_NAME);
+
+        // Send Intent so that the ImageWallpaper knows to clear the bitmap
+        Intent mIntent = new Intent();
+        mIntent.setAction(INTENT_LOCKSCREEN_WALLPAPER_CHANGED);
+        mContext.sendBroadcastAsUser(mIntent, UserHandle.ALL);
+
         /*Some "no wallpaper" image (grayed out?)*/
         mWallpaperButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_wallpaper_none));
     }
