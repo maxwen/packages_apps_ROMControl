@@ -83,6 +83,8 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     private static final CharSequence PREF_NOTIFICATION_WALLPAPER = "notification_wallpaper";
     private static final CharSequence PREF_NOTIFICATION_WALLPAPER_ALPHA =
             "notification_wallpaper_alpha";
+    private static final CharSequence PREF_NOTIFICATION_ALPHA =
+            "notification_alpha";
     private static final CharSequence PREF_CUSTOM_CARRIER_LABEL = "custom_carrier_label";
     private static final CharSequence PREF_NOTIFICATION_SHOW_WIFI_SSID = "notification_show_wifi_ssid";
     private static final CharSequence PREF_SHOW_OVERFLOW = "show_overflow";
@@ -130,6 +132,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     Preference mNotificationWallpaper;
     Preference mLockscreenWallpaper;
     Preference mWallpaperAlpha;
+    Preference mNotificationAlpha;
     Preference mCustomLabel;
     CheckBoxPreference mShowWifiName;
     Preference mCustomBootAnimation;
@@ -223,7 +226,8 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         mNotificationWallpaper = findPreference(PREF_NOTIFICATION_WALLPAPER);
 
         mWallpaperAlpha = (Preference) findPreference(PREF_NOTIFICATION_WALLPAPER_ALPHA);
-
+        mNotificationAlpha = (Preference) findPreference(PREF_NOTIFICATION_ALPHA);
+        
         mVibrateOnExpand = (CheckBoxPreference) findPreference(PREF_VIBRATE_NOTIF_EXPAND);
         mVibrateOnExpand.setChecked(Settings.System.getBoolean(mContentResolver,
                 Settings.System.VIBRATE_NOTIF_EXPAND, true));
@@ -321,6 +325,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             mStatusBarAutoExpandHidden.setEnabled(false);
             mNotificationWallpaper.setEnabled(false);
             mWallpaperAlpha.setEnabled(false);
+            mNotificationAlpha.setEnabled(false);
         } else {
             mHideExtras.setEnabled(false);
         }
@@ -521,6 +526,56 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                     .create()
                     .show();
             return true;
+        } else if (preference == mNotificationAlpha) {
+            Resources res = getActivity().getResources();
+            String cancel = res.getString(R.string.cancel);
+            String ok = res.getString(R.string.ok);
+            String title = res.getString(R.string.alpha_dialog_title);
+            float savedProgress = Settings.System.getFloat(mContentResolver,
+                    Settings.System.NOTIF_ALPHA, 1.0f);
+
+            LayoutInflater factory = LayoutInflater.from(getActivity());
+            View alphaDialog = factory.inflate(R.layout.seekbar_dialog, null);
+            SeekBar seekbar = (SeekBar) alphaDialog.findViewById(R.id.seek_bar);
+            OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekbar,
+                                              int progress, boolean fromUser) {
+                    mSeekbarProgress = seekbar.getProgress();
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekbar) {
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekbar) {
+                }
+            };
+            seekbar.setProgress((int) (savedProgress * 100));
+            seekbar.setMax(100);
+            seekbar.setOnSeekBarChangeListener(seekBarChangeListener);
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(title)
+                    .setView(alphaDialog)
+                    .setNegativeButton(cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // nothing
+                        }
+                    })
+                    .setPositiveButton(ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            float val = (float) mSeekbarProgress / 100;
+                            Settings.System.putFloat(mContentResolver,
+                                    Settings.System.NOTIF_ALPHA, val);
+                            Helpers.restartSystemUI();
+                        }
+                    })
+                    .create()
+                    .show();
+            return true;
         } else if (preference == mShowImeSwitcher) {
             Settings.System.putBoolean(mContentResolver,
                     Settings.System.SHOW_STATUSBAR_IME_SWITCHER,
@@ -684,8 +739,8 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     }
     
     public void findWallpaperStatus() {
-        File wallpaper = new File(mContext.getFilesDir(), WALLPAPER_NAME);
-        mWallpaperAlpha.setEnabled(wallpaper.exists() ? true : false);
+        //File wallpaper = new File(mContext.getFilesDir(), WALLPAPER_NAME);
+        //mWallpaperAlpha.setEnabled(wallpaper.exists() ? true : false);
     }
     
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1110,6 +1165,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             mNotificationWallpaper.setEnabled(val == 1 ? false : true);
             if (val == 1) {
                 mWallpaperAlpha.setEnabled(false);
+                mNotificationAlpha.setEnabled(false);
             } else {
                 findWallpaperStatus();
             }
