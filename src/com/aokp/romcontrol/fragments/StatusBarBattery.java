@@ -129,6 +129,10 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
             mBatteryBarColor.setEnabled(false);
             mBatteryBarChargingAnimation.setEnabled(false);
             mBatteryBarThickness.setEnabled(false);
+            mBatteryBarStyle.setSummary(R.string.enable_battery_bar);
+            mBatteryBarColor.setSummary(R.string.enable_battery_bar);
+            mBatteryBarChargingAnimation.setSummary(R.string.enable_battery_bar);
+            mBatteryBarThickness.setSummary(R.string.enable_battery_bar);
         }
     }
 
@@ -215,11 +219,19 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
                 mBatteryBarColor.setEnabled(false);
                 mBatteryBarChargingAnimation.setEnabled(false);
                 mBatteryBarThickness.setEnabled(false);
+                mBatteryBarStyle.setSummary(R.string.enable_battery_bar);
+                mBatteryBarColor.setSummary(R.string.enable_battery_bar);
+                mBatteryBarChargingAnimation.setSummary(R.string.enable_battery_bar);
+                mBatteryBarThickness.setSummary(R.string.enable_battery_bar);
             } else {
                 mBatteryBarStyle.setEnabled(true);
                 mBatteryBarColor.setEnabled(true);
                 mBatteryBarChargingAnimation.setEnabled(true);
                 mBatteryBarThickness.setEnabled(true);
+                mBatteryBarStyle.setSummary(null);
+                mBatteryBarColor.setSummary(null);
+                mBatteryBarChargingAnimation.setSummary(R.string.battery_bar_animate_summary);
+                mBatteryBarThickness.setSummary(null);
             }
             return true;
 

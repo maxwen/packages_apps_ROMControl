@@ -98,6 +98,9 @@ public class StatusBarClock extends AOKPPreferenceFragment implements
         if (Integer.parseInt(mClockStyle.getValue()) == 0) {
             mClockAmPmstyle.setEnabled(false);
             mClockWeekday.setEnabled(false);
+            mClockAmPmstyle.setSummary(R.string.enable_clock_location);
+            mColorPicker.setSummary(R.string.enable_clock_location);
+            mClockWeekday.setSummary(R.string.enable_clock_location);
         }
     }
 
@@ -119,9 +122,15 @@ public class StatusBarClock extends AOKPPreferenceFragment implements
             if (val == 0) {
                 mClockAmPmstyle.setEnabled(false);
                 mClockWeekday.setEnabled(false);
+                mClockAmPmstyle.setSummary(R.string.enable_clock_location);
+                mColorPicker.setSummary(R.string.enable_clock_location);
+                mClockWeekday.setSummary(R.string.enable_clock_location);
             } else {
                 mClockAmPmstyle.setEnabled(true);
                 mClockWeekday.setEnabled(true);
+                mClockAmPmstyle.setSummary(null);
+                mColorPicker.setSummary(null);
+                mClockWeekday.setSummary(R.string.enable_clock_weekday_summary);
             }
             if (val == 2) { //center clock
             	Settings.System.putBoolean(mContentRes,

@@ -81,9 +81,9 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     private static final CharSequence PREF_270 = "rotate_270";
     private static final CharSequence PREF_STATUS_BAR_NOTIF_COUNT = "status_bar_notif_count";
     private static final CharSequence PREF_NOTIFICATION_WALLPAPER = "notification_wallpaper";
-    private static final CharSequence PREF_NOTIFICATION_WALLPAPER_ALPHA =
-            "notification_wallpaper_alpha";
     private static final CharSequence PREF_NOTIFICATION_ALPHA =
+            "notification_wallpaper_alpha";
+    private static final CharSequence PREF_NOTIFICATION_ROW_ALPHA =
             "notification_alpha";
     private static final CharSequence PREF_CUSTOM_CARRIER_LABEL = "custom_carrier_label";
     private static final CharSequence PREF_NOTIFICATION_SHOW_WIFI_SSID = "notification_show_wifi_ssid";
@@ -106,7 +106,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     private static final CharSequence PREF_DISPLAY = "display";
     private static final CharSequence PREF_POWER_CRT_MODE = "system_power_crt_mode";
     private static final CharSequence PREF_POWER_CRT_SCREEN_OFF = "system_power_crt_screen_off";
-    private static final CharSequence PREF_LOCKSCREEN_WALLPAPER = "lockscreen_wallpaper";
     private static final CharSequence PREF_STATUSBAR_HIDDEN = "statusbar_hidden";
     private static final CharSequence PREF_STATUSBAR_AUTO_EXPAND_HIDDEN = "statusbar_auto_expand_hidden";
     private static final CharSequence PREF_STATUSBAR_SWIPE_ENABLE = "statusbar_swipe_enable";
@@ -118,10 +117,8 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     private static final int REQUEST_PICK_WALLPAPER = 201;
     //private static final int REQUEST_PICK_CUSTOM_ICON = 202; //unused
     private static final int REQUEST_PICK_BOOT_ANIMATION = 203;
-    private static final int REQUEST_PICK_LOCKSCREEN_WALLPAPER = 204;
     
     private static final String WALLPAPER_NAME = "notification_wallpaper.jpg";
-    private static final String LOCKSCREEN_WALLPAPER_NAME = "lockscreen_wallpaper.jpg";
     private static final String BOOTANIMATION_USER_PATH = "/data/local/bootanimation.zip";
     private static final String BOOTANIMATION_SYSTEM_PATH = "/system/media/bootanimation.zip";
 
@@ -130,9 +127,8 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     CheckBoxPreference mDisableBootAnimation;
     CheckBoxPreference mStatusBarNotifCount;
     Preference mNotificationWallpaper;
-    Preference mLockscreenWallpaper;
-    Preference mWallpaperAlpha;
-    Preference mNotificationAlpha;
+    Preference mNotificationWallpaperAlpha;
+    Preference mNotificationRowAlpha;
     Preference mCustomLabel;
     CheckBoxPreference mShowWifiName;
     Preference mCustomBootAnimation;
@@ -169,6 +165,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     private static int mLastRandomInsultIndex = -1;
     private String[] mInsults;
 
+    private int mUiMode;
     private int mSeekbarProgress;
     String mCustomLabelText = null;
     int mUserRotationAngles = -1;
@@ -225,8 +222,8 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
 
         mNotificationWallpaper = findPreference(PREF_NOTIFICATION_WALLPAPER);
 
-        mWallpaperAlpha = (Preference) findPreference(PREF_NOTIFICATION_WALLPAPER_ALPHA);
-        mNotificationAlpha = (Preference) findPreference(PREF_NOTIFICATION_ALPHA);
+        mNotificationWallpaperAlpha = (Preference) findPreference(PREF_NOTIFICATION_ALPHA);
+        mNotificationRowAlpha = (Preference) findPreference(PREF_NOTIFICATION_ROW_ALPHA);
         
         mVibrateOnExpand = (CheckBoxPreference) findPreference(PREF_VIBRATE_NOTIF_EXPAND);
         mVibrateOnExpand.setChecked(Settings.System.getBoolean(mContentResolver,
@@ -319,21 +316,23 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         mFontsize.setValue(Integer.toString(Settings.System.getInt(mContentRes,
                 Settings.System.STATUSBAR_FONT_SIZE, STOCK_FONT_SIZE)));
 
-        if (isTabletUI(mContext)) {
+        mUiMode = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.CURRENT_UI_MODE, 0);
+
+        if (mUiMode == 1) {
             mStatusbarSliderPreference.setEnabled(false);
             mStatusBarHide.setEnabled(false);
             mStatusBarAutoExpandHidden.setEnabled(false);
             mNotificationWallpaper.setEnabled(false);
-            mWallpaperAlpha.setEnabled(false);
-            mNotificationAlpha.setEnabled(false);
+            mNotificationWallpaperAlpha.setEnabled(false);
+            mNotificationRowAlpha.setEnabled(false);
+            mStatusbarSliderPreference.setSummary(R.string.enable_phone_or_phablet);
+            mStatusBarHide.setSummary(R.string.enable_phone_or_phablet);
         } else {
             mHideExtras.setEnabled(false);
+            mHideExtras.setSummary(R.string.enable_tablet_ui);
         }
-
-        mLockscreenWallpaper = findPreference(PREF_LOCKSCREEN_WALLPAPER);
-        
         setHasOptionsMenu(true);
-        resetBootAnimation();
     }
 
     @Override
@@ -349,6 +348,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                 mDisableBootAnimation.setSummary(null);
             }
         }
+        resetBootAnimation();
     }
 
     /**
@@ -369,6 +369,9 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             mBootAnimationPath = "";
         }
         mCustomBootAnimation.setEnabled(!mDisableBootAnimation.isChecked());
+        mCustomBootAnimation.setSummary(mDisableBootAnimation.isChecked()
+                ? R.string.enable_bootanimation_unlock
+                : R.string.custom_bootanimation_summary);
         return bootAnimationExists;
     }
 
@@ -475,7 +478,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                     Bitmap.CompressFormat.PNG.toString());
             startActivityForResult(intent, REQUEST_PICK_WALLPAPER);
             return true;
-        } else if (preference == mWallpaperAlpha) {
+        } else if (preference == mNotificationWallpaperAlpha) {
             Resources res = getActivity().getResources();
             String cancel = res.getString(R.string.cancel);
             String ok = res.getString(R.string.ok);
@@ -525,7 +528,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                     .create()
                     .show();
             return true;
-        } else if (preference == mNotificationAlpha) {
+        } else if (preference == mNotificationRowAlpha) {
             Resources res = getActivity().getResources();
             String cancel = res.getString(R.string.cancel);
             String ok = res.getString(R.string.ok);
@@ -658,31 +661,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
             Settings.System.putBoolean(getActivity().getContentResolver(),
                     Settings.System.STATUSBAR_SWIPE_ENABLE, checked);
             return true;
-        } else if (preference == mLockscreenWallpaper) {
-            Display display = getActivity().getWindowManager().getDefaultDisplay();
-            int width = display.getWidth();
-            int height = display.getHeight();
-
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
-
-            intent.setType("image/*");
-            intent.putExtra("crop", "true");
-            boolean isPortrait = getResources()
-                    .getConfiguration().orientation
-                    == Configuration.ORIENTATION_PORTRAIT;
-            intent.putExtra("aspectX", isPortrait ? width : height);
-            intent.putExtra("aspectY", isPortrait ? height : width);
-            intent.putExtra("outputX", width);
-            intent.putExtra("outputY", height);
-            intent.putExtra("scale", true);
-            intent.putExtra("scaleUpIfNeeded", true);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                    getLockscreenExternalUri());
-            intent.putExtra("outputFormat",
-                    Bitmap.CompressFormat.PNG.toString());
-
-            startActivityForResult(intent, REQUEST_PICK_LOCKSCREEN_WALLPAPER);
-            return true;
 		}
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
@@ -705,14 +683,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                     }
                 }).start();
                 return true;
-             case R.id.remove_lockscreen_wallpaper:
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mContext.deleteFile(LOCKSCREEN_WALLPAPER_NAME);
-                    }
-                }).start();
-                return true;
            default:
                 // call to super is implicit
                 return onContextItemSelected(item);
@@ -722,12 +692,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     private Uri getNotificationExternalUri() {
         File dir = mContext.getExternalCacheDir();
         File wallpaper = new File(dir, WALLPAPER_NAME);
-        return Uri.fromFile(wallpaper);
-    }
-
-    private Uri getLockscreenExternalUri() {
-        File dir = mContext.getExternalCacheDir();
-        File wallpaper = new File(dir, LOCKSCREEN_WALLPAPER_NAME);
         return Uri.fromFile(wallpaper);
     }
         
@@ -765,26 +729,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                 }
                 mBootAnimationPath = data.getData().getPath();
                 openBootAnimationDialog();
-            } else if (requestCode == REQUEST_PICK_LOCKSCREEN_WALLPAPER) {
-                FileOutputStream wallpaperStream = null;
-                try {
-                    wallpaperStream = mContext.openFileOutput(LOCKSCREEN_WALLPAPER_NAME,
-                            Context.MODE_WORLD_READABLE);
-                	Uri selectedImageUri = getLockscreenExternalUri();
-                	Bitmap bitmap = BitmapFactory.decodeFile(selectedImageUri.getPath());
-					if (bitmap != null){
-                		bitmap.compress(Bitmap.CompressFormat.PNG, 100, wallpaperStream);
-                	}
-                } catch (FileNotFoundException e) {
-                    return; // NOOOOO
-                } finally {
-                    try {
-                        if (wallpaperStream != null)
-                            wallpaperStream.close();
-                    } catch (IOException e) {
-                        // let it go
-                    }
-                }
             }
         }
     }
@@ -1132,37 +1076,21 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mUserModeUI) {
-            int val = Integer.valueOf((String) newValue);
+            mUiMode = Integer.valueOf((String) newValue);
             Settings.System.putInt(mContentResolver,
-                    Settings.System.USER_UI_MODE, val);
-            mStatusbarSliderPreference.setEnabled(val == 1 ? false : true);
-            
-            mStatusBarHide.setEnabled(val == 1 ? false : true);
-
-            if (val == 1){
-                mStatusBarHide.setChecked(false);
-                Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.STATUSBAR_HIDDEN_NOW, false);
-            }    
- 
-            mStatusBarAutoExpandHidden.setEnabled(val == 1 ? false : true);
-            if (val == 1){
-                mStatusBarAutoExpandHidden.setChecked(val == 1 ? false : true);
-                Settings.System.putBoolean(getActivity().getContentResolver(),
-                    Settings.System.STATUSBAR_AUTO_EXPAND_HIDDEN, false);
-            }   
-             
-            mNotificationWallpaper.setEnabled(val == 1 ? false : true);
-            mWallpaperAlpha.setEnabled(val == 1 ? false : true);
-            mNotificationAlpha.setEnabled(val == 1 ? false : true);
-
-            mHideExtras.setEnabled(val == 1 ? true : false);
-            if (val != 1){
-                mHideExtras.setChecked(false);
-                Settings.System.putBoolean(mContentResolver,
-                    Settings.System.HIDE_EXTRAS_SYSTEM_BAR, false);
-            }
-
+                    Settings.System.USER_UI_MODE, mUiMode);
+            mStatusbarSliderPreference.setEnabled(mUiMode == 1 ? false : true);
+            mStatusBarHide.setEnabled(mUiMode == 1 ? false : true);
+            mStatusbarSliderPreference.setSummary(mUiMode == 1 ? R.string.enable_phone_or_phablet
+                    : R.string.brightness_slider_summary);
+            mStatusBarHide.setSummary(mUiMode == 1 ? R.string.enable_phone_or_phablet
+                    : R.string.statusbar_hide_summary);
+            mNotificationWallpaper.setEnabled(mUiMode == 1 ? false : true);
+            mNotificationWallpaperAlpha.setEnabled(mUiMode == 1 ? false : true);
+            mNotificationRowAlpha.setEnabled(mUiMode == 1 ? false : true);
+            mHideExtras.setEnabled(mUiMode == 1 ? true : false);
+            mHideExtras.setSummary(mUiMode == 1 ? R.string.hide_extras_summary
+                    : R.string.enable_tablet_ui);
             Helpers.restartSystemUI();
             return true;
         } else if (preference == mCrtMode) {

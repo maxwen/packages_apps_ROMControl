@@ -176,12 +176,6 @@
                 android:targetPackage="com.cyanogenmod.lockclock"
                 android:targetClass="com.cyanogenmod.lockclock.preference.Preferences" />
        </PreferenceScreen> 
-
-        <Preference
-            android:key="lockscreen_wallpaper"
-            android:title="@string/lockscreen_wallpaper_title"
-            android:summary="@string/lockscreen_wallpaper_summary" />
-
     </PreferenceCategory>
 
     <PreferenceCategory
