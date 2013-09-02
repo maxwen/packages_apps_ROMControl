@@ -155,8 +155,10 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
         if (preference == mBatteryIcon) {
 
             int val = Integer.parseInt((String) newValue);
-            return Settings.System.putInt(mContentRes,
+			Settings.System.putInt(mContentRes,
                     Settings.System.STATUSBAR_BATTERY_ICON, val);
+            updateBatteryIconOptions();
+            return true;
         } else if (preference == mCircleColor) {
             String hex = ColorPickerPreference.convertToARGB(Integer
                     .valueOf(String.valueOf(newValue)));
