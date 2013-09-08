@@ -334,7 +334,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         
         setHasOptionsMenu(true);
         resetBootAnimation();
-        findWallpaperStatus();
     }
 
     @Override
@@ -702,12 +701,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                     @Override
                     public void run() {
                         mContext.deleteFile(WALLPAPER_NAME);
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                findWallpaperStatus();
-                            }
-                        });
                         Helpers.restartSystemUI();
                     }
                 }).start();
@@ -737,12 +730,7 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         File wallpaper = new File(dir, LOCKSCREEN_WALLPAPER_NAME);
         return Uri.fromFile(wallpaper);
     }
-    
-    public void findWallpaperStatus() {
-        //File wallpaper = new File(mContext.getFilesDir(), WALLPAPER_NAME);
-        //mWallpaperAlpha.setEnabled(wallpaper.exists() ? true : false);
-    }
-    
+        
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_PICK_WALLPAPER) {
@@ -753,9 +741,11 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                     Uri selectedImageUri = getNotificationExternalUri();
                     Bitmap bitmap = BitmapFactory.decodeFile(
                             selectedImageUri.getPath());
-                    bitmap.compress(Bitmap.CompressFormat.PNG,
+                    if (bitmap != null){
+                        bitmap.compress(Bitmap.CompressFormat.PNG,
                             100,
                             wallpaperStream);
+                    }
                 } catch (FileNotFoundException e) {
                     return; // NOOOOO
                 } finally {
@@ -767,7 +757,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                         // let it go
                     }
                 }
-                findWallpaperStatus();
                 Helpers.restartSystemUI();
             } else if (requestCode == REQUEST_PICK_BOOT_ANIMATION) {
                 if (data == null) {
@@ -783,8 +772,9 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                             Context.MODE_WORLD_READABLE);
                 	Uri selectedImageUri = getLockscreenExternalUri();
                 	Bitmap bitmap = BitmapFactory.decodeFile(selectedImageUri.getPath());
-
-                	bitmap.compress(Bitmap.CompressFormat.PNG, 100, wallpaperStream);
+					if (bitmap != null){
+                		bitmap.compress(Bitmap.CompressFormat.PNG, 100, wallpaperStream);
+                	}
                 } catch (FileNotFoundException e) {
                     return; // NOOOOO
                 } finally {
@@ -1157,18 +1147,14 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
  
             mStatusBarAutoExpandHidden.setEnabled(val == 1 ? false : true);
             if (val == 1){
-                mStatusBarAutoExpandHidden.setChecked(false);
+                mStatusBarAutoExpandHidden.setChecked(val == 1 ? false : true);
                 Settings.System.putBoolean(getActivity().getContentResolver(),
                     Settings.System.STATUSBAR_AUTO_EXPAND_HIDDEN, false);
             }   
              
             mNotificationWallpaper.setEnabled(val == 1 ? false : true);
-            if (val == 1) {
-                mWallpaperAlpha.setEnabled(false);
-                mNotificationAlpha.setEnabled(false);
-            } else {
-                findWallpaperStatus();
-            }
+            mWallpaperAlpha.setEnabled(val == 1 ? false : true);
+            mNotificationAlpha.setEnabled(val == 1 ? false : true);
 
             mHideExtras.setEnabled(val == 1 ? true : false);
             if (val != 1){
