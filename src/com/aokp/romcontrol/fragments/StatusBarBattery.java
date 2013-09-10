@@ -255,21 +255,16 @@ public class StatusBarBattery extends AOKPPreferenceFragment implements
         int batteryIconStat = Settings.System.getInt(getActivity().getContentResolver(),
                Settings.System.STATUSBAR_BATTERY_ICON, 0);
 
-        if (batteryIconStat == 0 || batteryIconStat == 1 || batteryIconStat == 5) {
-            mCircleColor.setEnabled(false);
-            mCircleTextColor.setEnabled(false);
-            mCircleAnimSpeed.setEnabled(false);
-            mCircleColorReset.setEnabled(false);
-        } else if (batteryIconStat == 2) {
-            mCircleColor.setEnabled(true);
-            mCircleTextColor.setEnabled(false);
-            mCircleAnimSpeed.setEnabled(true);
-            mCircleColorReset.setEnabled(true);
-        } else {
+        if (batteryIconStat >= 5 && batteryIconStat <= 8) {
             mCircleColor.setEnabled(true);
             mCircleTextColor.setEnabled(true);
             mCircleAnimSpeed.setEnabled(true);
             mCircleColorReset.setEnabled(true);
+        } else {
+            mCircleColor.setEnabled(false);
+            mCircleTextColor.setEnabled(false);
+            mCircleAnimSpeed.setEnabled(false);
+            mCircleColorReset.setEnabled(false);
         }
     }
 }
