@@ -1285,7 +1285,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
         }
 
         private void updateToggleState() {
-            /*
         	if (linkTransparencies) {
                 mSbLabel.setText(R.string.transparency_dialog_transparency_sb_and_nv);
                 mNavigationBarGroup.setVisibility(View.GONE);
@@ -1293,7 +1292,6 @@ public class UserInterface extends AOKPPreferenceFragment implements OnPreferenc
                 mSbLabel.setText(R.string.transparency_dialog_statusbar);
                 mNavigationBarGroup.setVisibility(View.VISIBLE);
             }
-            */
         	mSbLabel.setText(R.string.transparency_dialog_statusbar);
 
             mSeekBars[STATUSBAR_KG_ALPHA]
