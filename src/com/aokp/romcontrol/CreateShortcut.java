@@ -78,6 +78,8 @@ public class CreateShortcut extends LauncherActivity {
             return R.drawable.ic_rom_control_weather;
         } else if (c.equals("HardwareKeys")){
             return R.drawable.ic_rom_control_hardware_keys;
+        } else if (c.equals("ScreenStateToggles")){
+            return R.drawable.ic_rom_control_screen_state;
         } else {
             return R.mipmap.ic_launcher;
         }

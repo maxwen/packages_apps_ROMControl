@@ -1262,6 +1262,15 @@ s will display</string>
     <string name="hardware_keys_action_kill_app">Kill app</string>
     <string name="hardware_keys_action_notifications">Notification shade toggle</string>            
 
+    <!-- screen state service -->
+    <string name="screen_state_toggles_title">Suspend Actions</string>
+    <string name="screen_state_toggles_enable_title">Enable</string>
+    <string name="screen_state_toggles_enable_summary">Actions will be executed on screen off. On screen on the previous state will be restored.</string>
+    <string name="screen_state_toggles_twog">Switch to 2G</string>
+    <string name="screen_state_toggles_twog_summary">Network mode will be switched to 2G on screen off</string>
+    <string name="screen_state_toggles_gps">Disable GPS</string>
+    <string name="screen_state_toggles_gps_summary">GPS based location service will be disabled on screen off</string>
+                
     <!-- Classic Recent Menu -->
     <string name="show_classic_recents">Classic Recents</string>
     <string name="show_classic_recents_summary">Show Gingerbread styled recents menu</string> 

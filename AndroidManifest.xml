@@ -108,6 +108,13 @@
             android:name=".fragments.HardwareKeys"
             android:label="@string/title_hardware_keys" >
             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />    
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".fragments.ScreenStateToggles"
+            android:label="@string/screen_state_toggles_title" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="com.aokp.romcontrol.SHORTCUT" />
