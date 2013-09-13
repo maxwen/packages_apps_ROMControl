@@ -35,6 +35,12 @@
             android:defaultValue="false"/>
 
         <CheckBoxPreference
+            android:key="screen_state_toggles_mobile_data"
+            android:title="@string/screen_state_toggles_mobile_data"
+            android:summary="@string/screen_state_toggles_mobile_data_summary"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
             android:key="screen_state_toggles_gps"
             android:title="@string/screen_state_toggles_gps"
             android:summary="@string/screen_state_toggles_gps_summary"
