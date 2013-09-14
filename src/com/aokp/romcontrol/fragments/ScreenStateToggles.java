@@ -23,11 +23,13 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
+import android.preference.PreferenceCategory;
 import android.provider.Settings;
 import android.content.Intent;
 import android.util.Log;
 import android.net.ConnectivityManager;
 import android.content.Context;
+import android.os.UserManager;
 
 import com.aokp.romcontrol.AOKPPreferenceFragment;
 import com.aokp.romcontrol.R;
@@ -38,11 +40,15 @@ public class ScreenStateToggles extends AOKPPreferenceFragment implements OnPref
     private static final String SCREEN_STATE_TOOGLES_TWOG = "screen_state_toggles_twog";
     private static final String SCREEN_STATE_TOOGLES_GPS = "screen_state_toggles_gps";
     private static final String SCREEN_STATE_TOOGLES_MOBILE_DATA = "screen_state_toggles_mobile_data";            
- 
+    private static final String SCREEN_STATE_CATGEGORY_LOCATION = "screen_state_toggles_location_key";            
+    private static final String SCREEN_STATE_CATGEGORY_MOBILE_DATA = "screen_state_toggles_mobile_key";            
+             
     private SwitchPreference mEnableScreenStateToggles;
     private CheckBoxPreference mEnableScreenStateTogglesTwoG;
     private CheckBoxPreference mEnableScreenStateTogglesGps;
     private CheckBoxPreference mEnableScreenStateTogglesMobileData;
+    private PreferenceCategory mMobileDateCategory;
+    private PreferenceCategory mLocationCategory;    
             
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +65,11 @@ public class ScreenStateToggles extends AOKPPreferenceFragment implements OnPref
         mEnableScreenStateToggles.setChecked(enabled);
         mEnableScreenStateToggles.setOnPreferenceChangeListener(this);
         
+        mMobileDateCategory = (PreferenceCategory) prefSet.findPreference(
+                SCREEN_STATE_CATGEGORY_MOBILE_DATA);
+        mLocationCategory = (PreferenceCategory) prefSet.findPreference(
+                SCREEN_STATE_CATGEGORY_LOCATION);
+                
         mEnableScreenStateTogglesTwoG = (CheckBoxPreference) prefSet.findPreference(
                 SCREEN_STATE_TOOGLES_TWOG);
         
@@ -70,15 +81,7 @@ public class ScreenStateToggles extends AOKPPreferenceFragment implements OnPref
             mEnableScreenStateTogglesTwoG.setChecked(
                 Settings.System.getBoolean(getContentResolver(), Settings.System.SCREEN_STATE_TWOG, false));
             mEnableScreenStateTogglesTwoG.setOnPreferenceChangeListener(this);
-            mEnableScreenStateTogglesTwoG.setEnabled(enabled);
         }
-        
-        // TODO: check if gps is available on this device?
-        mEnableScreenStateTogglesGps = (CheckBoxPreference) prefSet.findPreference(
-                SCREEN_STATE_TOOGLES_GPS);
-        mEnableScreenStateTogglesGps.setChecked(
-            Settings.System.getBoolean(getContentResolver(), Settings.System.SCREEN_STATE_GPS, false));
-        mEnableScreenStateTogglesGps.setOnPreferenceChangeListener(this);
 
         mEnableScreenStateTogglesMobileData = (CheckBoxPreference) prefSet.findPreference(
                 SCREEN_STATE_TOOGLES_MOBILE_DATA);
@@ -89,10 +92,28 @@ public class ScreenStateToggles extends AOKPPreferenceFragment implements OnPref
             mEnableScreenStateTogglesMobileData.setChecked(
                 Settings.System.getBoolean(getContentResolver(), Settings.System.SCREEN_STATE_MOBILE_DATA, false));
             mEnableScreenStateTogglesMobileData.setOnPreferenceChangeListener(this);
-            mEnableScreenStateTogglesMobileData.setEnabled(enabled);
         }
         
-        mEnableScreenStateTogglesGps.setEnabled(enabled);
+        // Only enable these controls if this user is allowed to change location
+        // sharing settings.
+        final UserManager um = (UserManager) getActivity().getSystemService(Context.USER_SERVICE);
+        boolean isLocationChangeAllowed = !um.hasUserRestriction(UserManager.DISALLOW_SHARE_LOCATION);
+
+        // TODO: check if gps is available on this device?
+        mEnableScreenStateTogglesGps = (CheckBoxPreference) prefSet.findPreference(
+                SCREEN_STATE_TOOGLES_GPS);
+        
+        if (!isLocationChangeAllowed){
+            getPreferenceScreen().removePreference(mEnableScreenStateTogglesGps);
+            mEnableScreenStateTogglesGps = null;
+        } else {
+            mEnableScreenStateTogglesGps.setChecked(
+                Settings.System.getBoolean(getContentResolver(), Settings.System.SCREEN_STATE_GPS, false));
+            mEnableScreenStateTogglesGps.setOnPreferenceChangeListener(this);
+        }
+                        
+        mMobileDateCategory.setEnabled(enabled);
+        mLocationCategory.setEnabled(enabled);
     }
 
     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -110,13 +131,9 @@ public class ScreenStateToggles extends AOKPPreferenceFragment implements OnPref
                 getActivity().stopService(service);
             }
             
-            if (mEnableScreenStateTogglesTwoG != null){
-                mEnableScreenStateTogglesTwoG.setEnabled(value);
-            }
-            mEnableScreenStateTogglesGps.setEnabled(value);
-            if (mEnableScreenStateTogglesMobileData != null){
-                mEnableScreenStateTogglesMobileData.setEnabled(value);
-            }
+            mMobileDateCategory.setEnabled(value);
+            mLocationCategory.setEnabled(value);
+
             return true;
         } else if (preference == mEnableScreenStateTogglesTwoG) {
             Settings.System.putBoolean(getContentResolver(),
