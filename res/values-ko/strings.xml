@@ -1013,26 +1013,6 @@
     <string name="size_3_dp">3 dp</string>
     <string name="size_4_dp">4 dp</string>
 
-    <!-- LED Values -->
-    <string name="time_0_seconds_off">Off</string>
-    <string name="time_0_2_seconds">.2 seconds</string>
-    <string name="time_0_5_seconds">.5 seconds</string>
-    <string name="time_1_second">1 second</string>
-    <string name="time_1_5_seconds">1.5 seconds</string>
-    <string name="time_2_seconds">2 seconds</string>
-    <string name="time_2_5_seconds">2.5 seconds</string>
-    <string name="time_3_seconds">3 seconds</string>
-    <string name="time_3_5_seconds">3.5 seconds</string>
-    <string name="time_4_seconds">4 seconds</string>
-    <string name="time_4_5_seconds">4.5 seconds</string>
-    <string name="time_5_seconds">5 seconds</string>
-    <string name="time_5_5_seconds">5.5 seconds</string>
-    <string name="time_6_seconds">6 seconds</string>
-    <string name="time_7_seconds">7 seconds</string>
-    <string name="time_8_seconds">8 seconds</string>
-    <string name="time_9_seconds">9 seconds</string>
-    <string name="time_10_seconds">10 seconds</string>
-
     <!-- LED brightness entries -->
     <string name="low">low</string>
     <string name="medium">medium</string>

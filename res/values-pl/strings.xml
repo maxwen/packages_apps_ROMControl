@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">ROM Control</string>
@@ -868,8 +867,10 @@
 
     <!-- LED Values -->
     <string name="time_0_seconds_off">Wyłączony</string>
-    <string name="time_0_2_seconds">.2 sekundy</string>
-    <string name="time_0_5_seconds">.5 sekundy</string>
+    <string name="time_0_2_seconds">0.2 sekundy</string>
+    <string name="time_0_4_seconds">0.4 sekundy</string>
+    <string name="time_0_6_seconds">0.6 sekundy</string>
+    <string name="time_0_8_seconds">0.8 sekundy</string>  
     <string name="time_1_second">1 sekunda</string>
     <string name="time_1_5_seconds">1.5 sekundy</string>
     <string name="time_2_seconds">2 sekundy</string>

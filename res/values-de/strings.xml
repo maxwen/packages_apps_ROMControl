@@ -634,4 +634,7 @@
     <string name="direction_west">W</string>
     <string name="direction_north_west">NW</string>
 
+    <!-- LED Values -->
+    <string name="time_0_seconds_off">Aus</string>
+
 </resources>

@@ -479,7 +479,9 @@
     <string-array name="led_entries" translatable="false">
         <item>@string/time_0_seconds_off</item>
         <item>@string/time_0_2_seconds</item>
-        <item>@string/time_0_5_seconds</item>
+        <item>@string/time_0_4_seconds</item>
+        <item>@string/time_0_6_seconds</item>
+        <item>@string/time_0_8_seconds</item>
         <item>@string/time_1_second</item>
         <item>@string/time_1_5_seconds</item>
         <item>@string/time_2_seconds</item>
@@ -501,7 +503,9 @@
     <integer-array name="led_values" translatable="false">
         <item>0</item>
         <item>200</item>
-        <item>500</item>
+        <item>400</item>
+        <item>600</item>
+        <item>800</item>
         <item>1000</item>
         <item>1500</item>
         <item>2000</item>

@@ -1017,8 +1017,10 @@
 
     <!-- LED Values -->
     <string name="time_0_seconds_off">Off</string>
-    <string name="time_0_2_seconds">.2 сек.</string>
-    <string name="time_0_5_seconds">.5 сек.</string>
+    <string name="time_0_2_seconds">0.2 сек.</string>
+    <string name="time_0_4_seconds">0.4 сек.</string>
+    <string name="time_0_6_seconds">0.6 сек.</string>
+    <string name="time_0_8_seconds">0.8 сек.</string>    
     <string name="time_1_second">1 сек.</string>
     <string name="time_1_5_seconds">1.5 сек.</string>
     <string name="time_2_seconds">2 сек.</string>

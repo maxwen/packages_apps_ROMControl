@@ -804,8 +804,10 @@
     <string name="size_3_dp">3 dp</string>
     <string name="size_4_dp">4 dp</string>
     <string name="time_0_seconds_off">Kapat</string>
-    <string name="time_0_2_seconds">.2 saniye</string>
-    <string name="time_0_5_seconds">.5 saniye</string>
+    <string name="time_0_2_seconds">0.2 saniye</string>
+    <string name="time_0_4_seconds">0.4 saniye</string>
+    <string name="time_0_6_seconds">0.6 saniye</string>
+    <string name="time_0_8_seconds">0.8 saniye</string>  
     <string name="time_1_second">1 saniye</string>
     <string name="time_1_5_seconds">1.5 saniye</string>
     <string name="time_2_seconds">2 saniye</string>

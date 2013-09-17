@@ -1016,23 +1016,6 @@
     <string name="size_4_dp">4 body</string>
     <!--LED Values-->
     <string name="time_0_seconds_off">Vypnuto</string>
-    <string name="time_0_2_seconds">200 ms</string>
-    <string name="time_0_5_seconds">500 ms</string>
-    <string name="time_1_second">1 s</string>
-    <string name="time_1_5_seconds">1,5 s</string>
-    <string name="time_2_seconds">2 s</string>
-    <string name="time_2_5_seconds">2,5 s</string>
-    <string name="time_3_seconds">3 s</string>
-    <string name="time_3_5_seconds">3,5 s</string>
-    <string name="time_4_seconds">4 s</string>
-    <string name="time_4_5_seconds">4,5 s</string>
-    <string name="time_5_seconds">5 se</string>
-    <string name="time_5_5_seconds">5,5 s</string>
-    <string name="time_6_seconds">6 s</string>
-    <string name="time_7_seconds">7 s</string>
-    <string name="time_8_seconds">8 s</string>
-    <string name="time_9_seconds">9 s</string>
-    <string name="time_10_seconds">10 s</string>
     <!--LED brightness entries-->
     <string name="low">slabý</string>
     <string name="medium">střední</string>
