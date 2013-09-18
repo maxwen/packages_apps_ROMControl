@@ -599,6 +599,7 @@
         <item>9000</item>
         <item>10000</item>
     </string-array>
+
     <string-array name="flip_screenoff_entries" translatable="false">
         <item>@string/time_0_seconds_instant_off</item>
         <item>@string/time_5_seconds</item>

@@ -41,7 +41,9 @@ public class Sound extends AOKPPreferenceFragment
 
     private int mCallPref;
     private int mFlipPref;
-
+    private int mHeadsetPref;
+    private int mBTPref;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +53,13 @@ public class Sound extends AOKPPreferenceFragment
         prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         mHeadphonesPluggedAction = (ListPreference) findPreference(PREF_HEADPHONES_PLUGGED_ACTION);
-
+        mHeadphonesPluggedAction.setOnPreferenceChangeListener(this);
+        mHeadsetPref = Integer.parseInt(prefs.getString(PREF_HEADPHONES_PLUGGED_ACTION, "-1"));
+        
         mBTPluggedAction = (ListPreference) findPreference(PREF_BT_CONNECTED_ACTION);
-
+        mBTPluggedAction.setOnPreferenceChangeListener(this);
+        mBTPref = Integer.parseInt(prefs.getString(PREF_BT_CONNECTED_ACTION, "-1"));
+        
         mEnableVolumeOptions = (CheckBoxPreference) findPreference(PREF_ENABLE_VOLUME_OPTIONS);
         mEnableVolumeOptions.setChecked(Settings.System.getBoolean(mContentRes,
                 Settings.System.ENABLE_VOLUME_OPTIONS, false));
@@ -91,14 +97,6 @@ public class Sound extends AOKPPreferenceFragment
 
         if (!hasPhoneAbility(mContext)) {
             getPreferenceScreen().removePreference(mPhoneSilent);
-        }
-
-        if (HeadphoneService.DEBUG) {
-            mContext.startService(new Intent(mContext, HeadphoneService.class));
-        }
-
-        if (FlipService.DEBUG) {
-            mContext.startService(new Intent(mContext, FlipService.class));
         }
 
         if (!hasVibration) {
@@ -167,6 +165,14 @@ public class Sound extends AOKPPreferenceFragment
             mCallPref = Integer.parseInt((String) newValue);
             flipServiceCheck();
             return true;
+        } else if (preference == mHeadphonesPluggedAction) {
+            mHeadsetPref = Integer.parseInt((String) newValue);
+            headsetServiceCheck();
+            return true;
+        } else if (preference == mBTPluggedAction) {
+            mBTPref = Integer.parseInt((String) newValue);
+            headsetServiceCheck();
+            return true;            
         }
         return false;
     }
@@ -176,6 +182,14 @@ public class Sound extends AOKPPreferenceFragment
             mContext.startService(new Intent(mContext, FlipService.class));
         } else {
             mContext.stopService(new Intent(mContext, FlipService.class));
+        }
+    }
+
+    private void headsetServiceCheck() {
+        if (mHeadsetPref != -1 || mBTPref != -1) {
+            mContext.startService(new Intent(mContext, HeadphoneService.class));
+        } else {
+            mContext.stopService(new Intent(mContext, HeadphoneService.class));
         }
     }
 }

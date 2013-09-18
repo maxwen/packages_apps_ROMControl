@@ -253,12 +253,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".service.ChangeFastChargeStateReceiver">
-            <intent-filter>
-                <action android:name="com.aokp.romcontrol.ACTION_CHANGE_FCHARGE_STATE"/>
-            </intent-filter>
-        </receiver>
         <receiver android:name=".service.CodeReceiver">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SECRET_CODE"/>
@@ -268,7 +262,6 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.BootService"/>
         <service android:name=".service.HeadphoneService"/>
         <service android:name=".service.FlipService"/>
         <service

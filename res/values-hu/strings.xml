@@ -993,8 +993,11 @@
 
     <!-- LED Values -->
     <string name="time_0_seconds_off">Ki</string>
-    <string name="time_0_2_seconds">.2 mp</string>
-    <string name="time_0_5_seconds">.5 mp</string>
+    <string name="time_0_2_seconds">0.2 mp</string>
+    <string name="time_0_4_seconds">0.4 mp</string>
+    <string name="time_0_5_seconds">0.5 mp</string>
+    <string name="time_0_6_seconds">0.6 mp</string>
+    <string name="time_0_8_seconds">0.8 mp</string>
     <string name="time_1_second">1 mp</string>
     <string name="time_1_5_seconds">1.5 mp</string>
     <string name="time_2_seconds">2 mp</string>

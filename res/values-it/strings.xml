@@ -695,6 +695,7 @@
     <!--LED Values-->
     <string name="time_0_2_seconds">0.2 secondi</string>
     <string name="time_0_4_seconds">0.4 secondi</string>
+    <string name="time_0_5_seconds">0.5 secondi</string>
     <string name="time_0_6_seconds">0.6 secondi</string>
     <string name="time_0_8_seconds">0.8 secondi</string>  
     <string name="time_1_second">1 secondo</string>

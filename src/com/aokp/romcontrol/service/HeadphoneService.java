@@ -14,7 +14,7 @@ import android.util.Log;
 
 public class HeadphoneService extends Service {
 
-    final static String TAG = "AudioReciver";
+    final static String TAG = "RC_HeadphoneService";
     public final static boolean DEBUG = false;
 
     public static final String KEY_BT_AUDIO_MODE = "bt_audio_mode";
@@ -113,6 +113,7 @@ public class HeadphoneService extends Service {
 
     @Override
     public void onDestroy() {
+        log("HeadphoneService onDestroy");
         unregisterReceiver(headsetReceiver);
         mRegistered = false;
         super.onDestroy();
@@ -132,9 +133,10 @@ public class HeadphoneService extends Service {
         // stored as strings from listpreference
         return Integer.parseInt(prefs.getString(KEY_BT_AUDIO_MODE, String.valueOf(MODE_UNTOUCHED)));
     }
-
+    
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public void onStart(Intent intent, int startid) {
+        log("HeadphoneService onStart");
         if (!mRegistered) {
             IntentFilter inf = new IntentFilter();
             inf.addAction(Intent.ACTION_HEADSET_PLUG);
@@ -144,7 +146,6 @@ public class HeadphoneService extends Service {
             registerReceiver(headsetReceiver, inf);
             mRegistered = true;
         }
-        return START_STICKY;
     }
 
     @Override

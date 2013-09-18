@@ -20,7 +20,7 @@ import android.util.Log;
 
 public class FlipService extends Service {
 
-    final static String TAG = "FlipService";
+    final static String TAG = "RC_FlipService";
     public final static boolean DEBUG = false;
 
     public static final String KEY_FLIP_MODE = "flip_mode";
@@ -268,29 +268,8 @@ public class FlipService extends Service {
     }
 
     @Override
-    public void onCreate() {
-        IntentFilter filter = new IntentFilter();
-        am = (AudioManager) service
-                .getSystemService(Context.AUDIO_SERVICE);
-        vib = (Vibrator) service
-                .getSystemService(Context.VIBRATOR_SERVICE);
-
-        if (getUserFlipAudioMode(service) != -1) {
-            getSensorManager().registerListener(sl,
-                    getSensorManager().getDefaultSensor(Sensor.TYPE_ORIENTATION),
-                    SensorManager.SENSOR_DELAY_UI);
-        }
-
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        filter.addAction(Intent.ACTION_SCREEN_ON);
-        filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
-        registerReceiver(screenReceiver, filter);
-
-        log("register sensor manager");
-    }
-
-    @Override
     public void onDestroy() {
+        log("FlipService onDestroy");
         if (mSecondReg) {
             getSensorManager().unregisterListener(sl);
         }
@@ -323,8 +302,26 @@ public class FlipService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_STICKY;
+    public void onStart(Intent intent, int startid) {
+        log("FlipService onStart");
+        IntentFilter filter = new IntentFilter();
+        am = (AudioManager) service
+                .getSystemService(Context.AUDIO_SERVICE);
+        vib = (Vibrator) service
+                .getSystemService(Context.VIBRATOR_SERVICE);
+
+        if (getUserFlipAudioMode(service) != -1) {
+            getSensorManager().registerListener(sl,
+                    getSensorManager().getDefaultSensor(Sensor.TYPE_ORIENTATION),
+                    SensorManager.SENSOR_DELAY_UI);
+        }
+
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
+        registerReceiver(screenReceiver, filter);
+
+        log("register sensor manager");
     }
 
     @Override
