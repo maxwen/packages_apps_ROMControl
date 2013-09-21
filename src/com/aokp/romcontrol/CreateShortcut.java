@@ -80,6 +80,8 @@ public class CreateShortcut extends LauncherActivity {
             return R.drawable.ic_rom_control_hardware_keys;
         } else if (c.equals("ScreenStateToggles")){
             return R.drawable.ic_rom_control_screen_state;
+        } else if (c.equals("WakeLockBlocker")){
+            return R.drawable.ic_rom_control_wakelock_blocker;
         } else {
             return R.mipmap.ic_launcher;
         }

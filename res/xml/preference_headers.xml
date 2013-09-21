@@ -141,4 +141,11 @@
         android:fragment="com.aokp.romcontrol.fragments.ScreenStateToggles"
         android:icon="@drawable/ic_rom_control_screen_state"
         android:title="@string/screen_state_toggles_title" />
+
+    <header
+        android:id="@+id/wakelock_blocker"
+        android:fragment="com.aokp.romcontrol.fragments.WakeLockBlocker"
+        android:icon="@drawable/ic_rom_control_wakelock_blocker"
+        android:title="@string/wakelock_blocker" />
+
 </preference-headers>
