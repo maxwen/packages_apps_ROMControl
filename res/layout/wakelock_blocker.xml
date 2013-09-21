@@ -17,8 +17,6 @@
         <RelativeLayout
             android:layout_width="200dip"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dip"
-            android:layout_marginEnd="6dip"
             android:layout_marginTop="6dip"
             android:layout_marginBottom="6dip"
             android:layout_weight="1">
@@ -54,8 +52,7 @@
                 android:id="@+id/wakelock_blocker_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="4dip"
-                android:layout_marginEnd="4dip"/>
+                android:padding="4dip"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -66,6 +63,5 @@
     <ListView
             android:id="@+id/wakelock_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"        
-            android:paddingTop="20dip" />
+            android:layout_height="match_parent"/>
 </LinearLayout>
