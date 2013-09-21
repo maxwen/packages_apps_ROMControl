@@ -56,16 +56,25 @@ public class WakeLockBlocker extends AOKPPreferenceFragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View rowView = mInflater.inflate(R.layout.wakelock_item, parent, false);
-            CheckBox check = (CheckBox)rowView.findViewById(R.id.wakelock_blocked);
+            final CheckBox check = (CheckBox)rowView.findViewById(R.id.wakelock_blocked);
             check.setText(mSeenWakeLocks.get(position));
             
             Boolean checked = mWakeLockState.get(check.getText().toString());
             check.setChecked(checked.booleanValue());
             
+            if(checked.booleanValue()){
+                check.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            }
+            
             check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton v, boolean checked) {
                         mWakeLockState.put(v.getText().toString(), new Boolean(checked));
+                        if(checked){
+                            check.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+                        } else {
+                            check.setTextColor(getResources().getColor(android.R.color.primary_text_dark));
+                        }
                     }
             });
             return rowView;
