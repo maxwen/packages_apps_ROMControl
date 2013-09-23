@@ -43,6 +43,7 @@ public class WakeLockBlocker extends AOKPPreferenceFragment {
     private boolean mEnabled;
     private AlertDialog mAlertDialog;
     private boolean mAlertShown = false;
+    private TextView mWakeLockListHeader;
         
     private static final int MENU_RELOAD = Menu.FIRST;
     private static final int MENU_SAVE = Menu.FIRST + 1;
@@ -101,7 +102,9 @@ public class WakeLockBlocker extends AOKPPreferenceFragment {
                 R.id.wakelock_blocker_switch);
         mWakeLockList = (ListView) getActivity().findViewById(
                 R.id.wakelock_list);
-        
+        mWakeLockListHeader = (TextView) getActivity().findViewById(
+                R.id.wakelock_list_header);
+
         mListAdapter = new WakeLockListAdapter(mContext, android.R.layout.simple_list_item_multiple_choice, mSeenWakeLocks);
         mWakeLockList.setAdapter(mListAdapter);
 
@@ -150,7 +153,9 @@ public class WakeLockBlocker extends AOKPPreferenceFragment {
                 Settings.System.WAKELOCK_BLOCKING_ENABLED, 0)==1?true:false);
         
         mEnabled = mBlockerEnabled.isChecked();
-        mWakeLockList.setEnabled(mEnabled);
+        //mWakeLockList.setEnabled(mEnabled);
+        mWakeLockList.setVisibility(mEnabled ?View.VISIBLE : View.INVISIBLE);
+        mWakeLockListHeader.setVisibility(mEnabled ?View.VISIBLE : View.INVISIBLE);
     }
     
     private void updateSeenWakeLocksList() {

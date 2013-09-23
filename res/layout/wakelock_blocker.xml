@@ -57,6 +57,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/wakelock_list_header"
         android:text="@string/wakelock_list_header"
         style="?android:attr/listSeparatorTextViewStyle" />
 
