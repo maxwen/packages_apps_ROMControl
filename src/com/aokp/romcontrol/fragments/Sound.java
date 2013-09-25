@@ -179,6 +179,7 @@ public class Sound extends AOKPPreferenceFragment
 
     private void flipServiceCheck() {
         if (mCallPref != 0 || mFlipPref != -1) {
+            mContext.stopService(new Intent(mContext, FlipService.class));
             mContext.startService(new Intent(mContext, FlipService.class));
         } else {
             mContext.stopService(new Intent(mContext, FlipService.class));
@@ -187,6 +188,7 @@ public class Sound extends AOKPPreferenceFragment
 
     private void headsetServiceCheck() {
         if (mHeadsetPref != -1 || mBTPref != -1) {
+            mContext.stopService(new Intent(mContext, HeadphoneService.class));
             mContext.startService(new Intent(mContext, HeadphoneService.class));
         } else {
             mContext.stopService(new Intent(mContext, HeadphoneService.class));
