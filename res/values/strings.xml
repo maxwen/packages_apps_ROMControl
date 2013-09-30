@@ -506,6 +506,7 @@
     <string name="wifi_signal_color_title">WiFi signal text color</string>
     <string name="alt_signal_title">Alt signal indicator layout</string>
     <string name="alt_signal_summary">Use alternate Gingerbread style signal cluster</string>
+
     <string name="statusbar_fontsize">Statusbar Font Size</string>
     <string name="statusbar_fontsize_summary">Change the size of text elements on statusbar\nWill restart UI!</string>
     <string name="font_8dp">8 dp</string>
@@ -518,6 +519,9 @@
     <string name="font_22dp">22 dp</string>
     <string name="font_24dp">24 dp</string>
     <string name="font_26dp">26 dp</string>
+
+    <string name="show_4g_for_lte_title">Use 4G icon on LTE</string>
+    <string name="show_4g_for_lte_summary">Show 4G network indicator icon instead of LTE icon</string>
 
     <!-- Color Picker -->
     <string name="dialog_color_picker">Color Picker</string>
