@@ -61,9 +61,11 @@ public class StatusBarSignal extends AOKPPreferenceFragment implements
         mHideAllSignal.setChecked(Settings.System.getBoolean(mContentRes,
                 Settings.System.STATUSBAR_HIDE_ALL_SIGNAL_BARS, false));
 
-        mShow4gForLte = (CheckBoxPreference) findPreference("show_4g_for_lte");
+        boolean check4gByDefault = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_show4GForLTE);
+        mShow4gForLte = (CheckBoxPreference)findPreference("show_4g_for_lte");
         mShow4gForLte.setChecked(Settings.System.getBoolean(mContentRes,
-                Settings.System.STATUSBAR_SIGNAL_SHOW_4G_FOR_LTE, true));
+                Settings.System.STATUSBAR_SIGNAL_SHOW_4G_FOR_LTE, check4gByDefault));
 
         if (Integer.parseInt(mDbmStyletyle.getValue()) == 0) {
             mColorPicker.setEnabled(false);
